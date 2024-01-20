@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Volunteer.h"
 
- CollectorVolunteer::CollectorVolunteer(int id, string name, int coolDown):Volunteer(id, name),*this.coolDown(coolDown){
+ CollectorVolunteer::CollectorVolunteer(int id1, string name1, int coolDown1):Volunteer(id1, name1),coolDown(coolDown1){
     timeLeft=0;
 
  }
