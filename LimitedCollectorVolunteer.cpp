@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Volunteer.h"
 
- LimitedCollectorVolunteer::LimitedCollectorVolunteer(int id, string name, int coolDown ,int maxOrders):CollectorVolunteer(id, name, coolDown),*this.maxOrders(maxOrders){
+ LimitedCollectorVolunteer::LimitedCollectorVolunteer(int id1, string name1, int coolDown1 ,int maxOrders1):CollectorVolunteer(id1, name1, coolDown1),maxOrders(maxOrders1){
     ordersLeft = maxOrders;
  }
 
