@@ -1,41 +1,44 @@
 #include <iostream>
 #include "Volunteer.h"
 
-DriverVolunteer::DriverVolunteer(int id, string name, int maxDistance, int distancePerStep):Volunteer(id, name),*this.maxDistance(maxDistance),*this.distancePerStep(distancePerStep){
-    distanceLeft = 0;
+Volunteer::Volunteer(int id1, const string &name1):id(id1),name(name1){
+    completedOrderId = NO_ORDER;
+    activeOrderId = NO_ORDER;
+
+    }
+
+int Volunteer::getId() const{
+    return id;
+
 }
 
- DriverVolunteer* DriverVolunteer::clone() const{//we deleted override
-    return new DriverVolunteer(*this);
+const string& Volunteer:: getName() const{
+    return name;
+}
 
- }
+int Volunteer:: getActiveOrderId() const{
+    return activeOrderId;
+}
 
- int DriverVolunteer::getDistanceLeft() const{
-    return distanceLeft;
- }
+int Volunteer::getCompletedOrderId() const{
+    return completedOrderId;
+}
 
- int DriverVolunteer::getMaxDistance() const{
-    return maxDistance;
- }
+bool Volunteer::isBusy() const{
+    //depends on other class, leave for later
+}
 
- int DriverVolunteer::getDistancePerStep() const{
-    return distancePerStep;
- }
 
-  bool DriverVolunteer::decreaseDistanceLeft(){//if distanceLeft=0 in first place?
-    distanceLeft = distanceLeft - distancePerStep;
 
-    if(distanceLeft<=0){
-        distanceLeft=0;
-        return true;
-    }
 
-    else{
-        return false;
-    }
 
-  }
 
-   bool DriverVolunteer::hasOrdersLeft() const{
-    return true;
-   }
+
+
+
+
+
+
+
+
+
