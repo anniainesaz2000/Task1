@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Volunteer.h"
 
-DriverVolunteer::DriverVolunteer(int id, string name, int maxDistance, int distancePerStep):Volunteer(id, name),*this.maxDistance(maxDistance),*this.distancePerStep(distancePerStep){
+DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int distancePerStep1):Volunteer(id1, name1),maxDistance(maxDistance1),distancePerStep(distancePerStep1){
     distanceLeft = 0;
 }
 
@@ -38,4 +38,26 @@ DriverVolunteer::DriverVolunteer(int id, string name, int maxDistance, int dista
 
    bool DriverVolunteer::hasOrdersLeft() const{
     return true;
+   }
+
+   bool DriverVolunteer::canTakeOrder(const Order &order) const{
+      return (!isBusy() && order.getDistance()<=maxDistance);
+   }
+
+   void DriverVolunteer::acceptOrder(const Order &order){
+      distanceLeft = order.getDistance();
+   }
+
+   void  DriverVolunteer::step(){
+      distanceLeft = distanceLeft - distancePerStep;
+   }
+
+   string DriverVolunteer::toString() const{
+   return ("id = " + getId() + "\nVolunteer name = " + getName() +
+    "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\nmaxDistance = " + maxDistance +
+    "\ndistancePerStep = " + distancePerStep + "\ndistanceLeft = " + distanceLeft);
+   }
+
+   void DriverVolunteer::setDistanceLeft(int distanceLeft1){
+      distanceLeft = distanceLeft1;
    }
