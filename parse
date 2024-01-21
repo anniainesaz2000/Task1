@@ -1,0 +1,52 @@
+#include <iostream>
+#include <sstream>
+#include <vector>
+
+void parseInput(const std::string &input, std::vector<Customer> &customers, std::vector<Volunteer> &volunteers) {
+    std::istringstream iss(input);
+    std::string type;
+    iss >> type;
+
+    if (type == "customer") {
+        std::string name, customerType;
+        int distance, maxOrders;
+        iss >> name >> customerType >> distance >> maxOrders;
+        customers.push_back(Customer(name, customerType, distance, maxOrders));
+    } else if (type == "volunteer") {
+        std::string name, volunteerRole;
+        int cooldown, maxDistance, distancePerStep = 0, maxOrders = -1;
+        iss >> name >> volunteerRole >> cooldown >> maxDistance;
+        if (volunteerRole == "driver") {
+            iss >> distancePerStep;
+        }
+        if (!(iss >> maxOrders)) {
+            // Optional parameter not provided, use default value
+            maxOrders = -1;
+        }
+        volunteers.push_back(Volunteer(name, volunteerRole, cooldown, maxDistance, distancePerStep, maxOrders));
+    }
+}
+
+int main() {
+    std::vector<Customer> customers;
+    std::vector<Volunteer> volunteers;
+
+    // Example input
+    std::string input1 = "customer Moshe soldier 3 2";
+    std::string input2 = "volunteer Tamar collector 2";
+
+    // Parse inputs
+    parseInput(input1, customers, volunteers);
+    parseInput(input2, customers, volunteers);
+
+    // Access the created objects
+    for (const auto &customer : customers) {
+        std::cout << "Customer: " << customer.name << " Type: " << customer.type << " Distance: " << customer.distance << " MaxOrders: " << customer.maxOrders << std::endl;
+    }
+
+    for (const auto &volunteer : volunteers) {
+        std::cout << "Volunteer: " << volunteer.name << " Role: " << volunteer.role << " Cooldown: " << volunteer.cooldown << " MaxDistance: " << volunteer.maxDistance << " DistancePerStep: " << volunteer.distancePerStep << " MaxOrders: " << volunteer.maxOrders << std::endl;
+    }
+
+    return 0;
+}
