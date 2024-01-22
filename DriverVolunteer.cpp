@@ -1,8 +1,8 @@
 #include <iostream>
-#include "Volunteer.h"
+#include "../include/Volunteer.h"
 
-DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int distancePerStep1):Volunteer(id1, name1),maxDistance(maxDistance1),distancePerStep(distancePerStep1){
-    distanceLeft = 0;
+DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int distancePerStep1):Volunteer(id1, name1),maxDistance(maxDistance1),distancePerStep(distancePerStep1),distanceLeft(0){
+   
 }
 
  DriverVolunteer* DriverVolunteer::clone() const{//we deleted override
@@ -48,15 +48,15 @@ DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int di
       distanceLeft = order.getDistance();
    }
 
-   void  DriverVolunteer::step(){
-      distanceLeft = distanceLeft - distancePerStep;
-   }
+   // void  DriverVolunteer::step(){
+   //    distanceLeft = distanceLeft - distancePerStep;
+   // }
 
-   string DriverVolunteer::toString() const{
-   return ("id = " + getId() + "\nVolunteer name = " + getName() +
-    "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\nmaxDistance = " + maxDistance +
-    "\ndistancePerStep = " + distancePerStep + "\ndistanceLeft = " + distanceLeft);
-   }
+   // string DriverVolunteer::toString() const{
+   // return ("id = " + getId() + "\nVolunteer name = " + getName() +
+   //  "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\nmaxDistance = " + maxDistance +
+   //  "\ndistancePerStep = " + distancePerStep + "\ndistanceLeft = " + distanceLeft);
+   // }
 
    void DriverVolunteer::setDistanceLeft(int distanceLeft1){
       distanceLeft = distanceLeft1;
