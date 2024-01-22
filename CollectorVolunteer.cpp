@@ -1,8 +1,7 @@
 #include <iostream>
-#include "Volunteer.h"
+#include "../include/Volunteer.h"
 
- CollectorVolunteer::CollectorVolunteer(int id1, string name1, int coolDown1):Volunteer(id1, name1),coolDown(coolDown1){
-    timeLeft=0;
+ CollectorVolunteer::CollectorVolunteer(int id1, string name1, int coolDown1):Volunteer(id1, name1),coolDown(coolDown1),timeLeft(0){
 
  }
 
@@ -11,10 +10,11 @@
 
  }
 
- void CollectorVolunteer::step(){//we deleted override
-    //need to complete
 
- }
+//  void CollectorVolunteer::step(){//we deleted override
+//     //need to complete
+
+//  }
 
  int CollectorVolunteer::getCoolDown() const{
     return coolDown;
@@ -54,11 +54,11 @@
 
  }
 
- string CollectorVolunteer::toString() const {//we deleted override
-    return ("id = " + getId() + "\nVolunteer name = " + getName() +
-    "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\ncoolDown = " + coolDown +
-    "\ntimeLeft = " + timeLeft);
- }
+//  string CollectorVolunteer::toString() const {//we deleted override
+//     return ("id = " + getId() + "\nVolunteer name = " + getName() +
+//     "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\ncoolDown = " + coolDown +
+//     "\ntimeLeft = " + timeLeft);
+//  }
 
 
 
