@@ -1,9 +1,9 @@
 #include <iostream>
-#include "Volunteer.h"
+#include "../include/Volunteer.h"
 
-Volunteer::Volunteer(int id1, const string &name1):id(id1),name(name1){
-    completedOrderId = NO_ORDER;
-    activeOrderId = NO_ORDER;
+Volunteer::Volunteer(int id1, const string &name1):completedOrderId(NO_ORDER),activeOrderId(NO_ORDER), id(id1),name(name1){
+    // completedOrderId = NO_ORDER;
+    // activeOrderId = NO_ORDER;
 
     }
 
@@ -25,7 +25,9 @@ int Volunteer::getCompletedOrderId() const{
 }
 
 bool Volunteer::isBusy() const{
-    //depends on other class, leave for later
+    //depends on other class, leave for later,need to change
+
+    return true;
 }
 
 
