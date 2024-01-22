@@ -1,13 +1,17 @@
 #include <iostream>
-#include "Volunteer.h"
+#include "../include/Volunteer.h"
 
- LimitedCollectorVolunteer::LimitedCollectorVolunteer(int id1, string name1, int coolDown1 ,int maxOrders1):CollectorVolunteer(id1, name1, coolDown1),maxOrders(maxOrders1){
-    ordersLeft = maxOrders;
+ LimitedCollectorVolunteer::LimitedCollectorVolunteer(int id1, string name1, int coolDown1 ,int maxOrders1):CollectorVolunteer(id1, name1, coolDown1),maxOrders(maxOrders1),ordersLeft(maxOrders){
+
  }
 
- LimitedCollectorVolunteer *clone() const{//we dfeleted override
+ LimitedCollectorVolunteer* LimitedCollectorVolunteer::clone() const{//we deleted "override"
     return new LimitedCollectorVolunteer(*this);
 
+ }
+
+ LimitedCollectorVolunteer::~LimitedCollectorVolunteer(){
+    delete this;
  }
 
  bool  LimitedCollectorVolunteer::hasOrdersLeft() const{//we dfeleted override
@@ -48,9 +52,9 @@ int LimitedCollectorVolunteer::getNumOrdersLeft() const{
     return ordersLeft;
 }
 
-string LimitedCollectorVolunteer::toString() const{
-    return (CollectorVolunteer::toString() + "\n maxOrders = " + maxOrders +"\nordersLeft = " + ordersLeft);
-}
+// string LimitedCollectorVolunteer::toString() const{
+//     return (CollectorVolunteer::toString() + "\n maxOrders = " + maxOrders +"\nordersLeft = " + ordersLeft);
+// }
 
 
 
