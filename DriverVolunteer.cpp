@@ -48,15 +48,15 @@ DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int di
       distanceLeft = order.getDistance();
    }
 
-   // void  DriverVolunteer::step(){
-   //    distanceLeft = distanceLeft - distancePerStep;
-   // }
+   void  DriverVolunteer::step(){
+      distanceLeft = distanceLeft - distancePerStep;
+   }
 
-   // string DriverVolunteer::toString() const{
-   // return ("id = " + getId() + "\nVolunteer name = " + getName() +
-   //  "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\nmaxDistance = " + maxDistance +
-   //  "\ndistancePerStep = " + distancePerStep + "\ndistanceLeft = " + distanceLeft);
-   // }
+   string DriverVolunteer::toString() const{
+   return ("id = " + std::to_string(getId()) + "\nVolunteer name = " + getName() +
+    "\ncompletedOrderId= " + std::to_string(completedOrderId) + "\nactiveOrderId =" + std::to_string(activeOrderId) +"\nmaxDistance = " + std::to_string(maxDistance) +
+    "\ndistancePerStep = " + std::to_string(distancePerStep) + "\ndistanceLeft = " + std::to_string(distanceLeft));
+   }
 
    void DriverVolunteer::setDistanceLeft(int distanceLeft1){
       distanceLeft = distanceLeft1;
