@@ -2,8 +2,6 @@
 #include "../include/Volunteer.h"
 
 Volunteer::Volunteer(int id1, const string &name1):completedOrderId(NO_ORDER),activeOrderId(NO_ORDER), id(id1),name(name1){
-    // completedOrderId = NO_ORDER;
-    // activeOrderId = NO_ORDER;
 
     }
 
