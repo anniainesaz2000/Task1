@@ -11,10 +11,10 @@
  }
 
 
-//  void CollectorVolunteer::step(){//we deleted override
-//     //need to complete
+ void CollectorVolunteer::step(){//we deleted override
+    timeLeft = timeLeft - 1;
 
-//  }
+ }
 
  int CollectorVolunteer::getCoolDown() const{
     return coolDown;
@@ -54,11 +54,11 @@
 
  }
 
-//  string CollectorVolunteer::toString() const {//we deleted override
-//     return ("id = " + getId() + "\nVolunteer name = " + getName() +
-//     "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\ncoolDown = " + coolDown +
-//     "\ntimeLeft = " + timeLeft);
-//  }
+ string CollectorVolunteer::toString() const {//we deleted override
+    return ("id = " + std::to_string(getId()) + "\nVolunteer name = " + getName() +
+    "\ncompletedOrderId= " + std::to_string(completedOrderId) + "\nactiveOrderId =" + std::to_string(activeOrderId) +"\ncoolDown = " + std::to_string(coolDown)+
+    "\ntimeLeft = " + std::to_string(timeLeft));
+ }
 
 
 
