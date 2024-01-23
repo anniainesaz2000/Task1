@@ -52,9 +52,9 @@ int LimitedCollectorVolunteer::getNumOrdersLeft() const{
     return ordersLeft;
 }
 
-// string LimitedCollectorVolunteer::toString() const{
-//     return (CollectorVolunteer::toString() + "\n maxOrders = " + maxOrders +"\nordersLeft = " + ordersLeft);
-// }
+string LimitedCollectorVolunteer::toString() const{
+    return (CollectorVolunteer::toString() + "\n maxOrders = " + std::to_string(maxOrders) +"\nordersLeft = " + std::to_string(ordersLeft));
+}
 
 
 
