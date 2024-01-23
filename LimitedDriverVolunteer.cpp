@@ -34,8 +34,8 @@ void LimitedDriverVolunteer::acceptOrder(const Order &order){
     ordersLeft = ordersLeft - 1;
 }
 
-// string LimitedDriverVolunteer::toString() const{
-//     return ("id = " + getId() + "\nVolunteer name = " + getName() +
-//     "\ncompletedOrderId= " + completedOrderId + "\nactiveOrderId =" + activeOrderId +"\nmaxDistance = " + getMaxDistance() +
-//     "\ndistancePerStep = " + getDistancePerStep() + "\ndistanceLeft = " + getDistanceLeft() + "\nmaxOrders = " + maxOrders + "\nordersLeft = " + ordersLeft);
-// }
+string LimitedDriverVolunteer::toString() const{
+    return ("id = " + std::to_string(getId()) + "\nVolunteer name = " + getName() +
+    "\ncompletedOrderId= " + std::to_string(completedOrderId) + "\nactiveOrderId =" + std::to_string(activeOrderId) +"\nmaxDistance = " + std::to_string(getMaxDistance()) +
+    "\ndistancePerStep = " + std::to_string(getDistancePerStep()) + "\ndistanceLeft = " + std::to_string(getDistanceLeft()) + "\nmaxOrders = " + std::to_string(maxOrders) + "\nordersLeft = " + std::to_string(ordersLeft));
+}
