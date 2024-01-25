@@ -49,7 +49,10 @@ DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int di
    }
 
    void  DriverVolunteer::step(){
-      distanceLeft = distanceLeft - distancePerStep;
+      if(decreaseDistanceLeft()){
+         completedOrderId = activeOrderId;
+         activeOrderId = NO_ORDER;
+      }
    }
 
    string DriverVolunteer::toString() const{
