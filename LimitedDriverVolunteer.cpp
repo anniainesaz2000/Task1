@@ -30,7 +30,12 @@ bool LimitedDriverVolunteer::canTakeOrder(const Order &order) const{ //do we nee
 }
 
 void LimitedDriverVolunteer::acceptOrder(const Order &order){
-    setDistanceLeft(order.getDistance());
+    DriverVolunteer::acceptOrder(order);
+    ordersLeft = ordersLeft - 1;
+}
+
+void LimitedDriverVolunteer::decreaseOrdersLeft(){
+
     ordersLeft = ordersLeft - 1;
 }
 
