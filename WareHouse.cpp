@@ -8,6 +8,16 @@
     //parse first
  }
 
+ // copy constructor
+WareHouse::WareHouse(const WareHouse &other):isOpen(other.isOpen),actionsLog(other.actionsLog),volunteers(other.volunteers),pendingOrders(other.pendingOrders),inProcessOrders(other.inProcessOrders),completedOrders(other.completedOrders),customers(other.customers),customerCounter(other.customerCounter),volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
+    for (int i = 0; i < int(other.actionsLog.size()); i++){
+        actionsLog.push_back(*(other.actionsLog.at(i)).clone());
+
+    }
+}
+
+
+
  void WareHouse::start(){
     open();//check if correct
     std::cout << "WareHouse is open!" << std::endl;
@@ -61,6 +71,24 @@ Volunteer& WareHouse::getVolunteer(int volunteerId) const{
 const vector<BaseAction*>& WareHouse::getActions() const{
     return actionsLog;
     }
+
+vector<Order*>& WareHouse::getPendingOrders(){
+    return pendingOrders;
+}
+
+vector<Order*> & WareHouse::getInProcessOrders(){
+     return inProcessOrders;
+}
+
+vector<Order*> & WareHouse::getCompletedOrders(){
+    return completedOrders;
+}
+
+
+vector<Volunteer*> & WareHouse::getVolunteers(){
+    return volunteers;
+}
+
 
 void WareHouse::close(){
  //use action close - elaborate in assignment 1
