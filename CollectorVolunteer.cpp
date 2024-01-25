@@ -5,15 +5,18 @@
 
  }
 
- CollectorVolunteer* CollectorVolunteer::clone() const{//we deleted override
+ CollectorVolunteer* CollectorVolunteer::clone() const{
     return new CollectorVolunteer(*this);
 
  }
 
 
- void CollectorVolunteer::step(){//we deleted override
-    timeLeft = timeLeft - 1;
-
+ void CollectorVolunteer::step(){
+    if(decreaseCoolDown()){
+       completedOrderId = activeOrderId;
+       activeOrderId = NO_ORDER;
+    }
+     
  }
 
  int CollectorVolunteer::getCoolDown() const{
@@ -44,8 +47,7 @@
  }
 
  bool CollectorVolunteer::canTakeOrder(const Order &order) const {//we deleted override
-    //how to use the paraneter order?
-    return !isBusy();
+    return (!isBusy()) ;
  }
 
  void CollectorVolunteer::acceptOrder(const Order &order) {//we deleted override
