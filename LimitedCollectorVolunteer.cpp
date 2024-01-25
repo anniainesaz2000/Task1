@@ -26,7 +26,7 @@
  }
 
  bool LimitedCollectorVolunteer::canTakeOrder(const Order &order) const{
-    //how to use the paraneter order?
+    
     if(!isBusy() && hasOrdersLeft()){
         return true;
     }
@@ -50,6 +50,11 @@ int LimitedCollectorVolunteer::getMaxOrders() const{
 
 int LimitedCollectorVolunteer::getNumOrdersLeft() const{
     return ordersLeft;
+}
+
+void LimitedCollectorVolunteer::decreaseOrdersLeft(){
+
+    ordersLeft = ordersLeft - 1;
 }
 
 string LimitedCollectorVolunteer::toString() const{
