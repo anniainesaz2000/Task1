@@ -2,8 +2,8 @@
 #include "../include/Customer.h"
 
 Customer::Customer(int id1, const string &name1, int locationDistance1, int maxOrders1): id(id1), name(name1),
-        locationDistance(locationDistance1), maxOrders(maxOrders1), ordersId(vector<int>()){
-        //ordersId = vector<int>();
+        locationDistance(locationDistance1), maxOrders(maxOrders1),ordersLeft(maxOrders), ordersId(vector<int>()){
+    
 }
 
 const string& Customer::getName() const{
@@ -26,8 +26,12 @@ int Customer::getNumOrders() const{
     return ordersId.size();
 } 
 
+ int Customer::getOrdersLeft() const{
+    return ordersLeft;
+ }
+
 bool Customer::canMakeOrder() const{
-    return ((int)ordersId.size()) < maxOrders;
+    return (ordersLeft > 0);
 } 
 
 const vector<int> & Customer::getOrdersIds() const{
@@ -38,12 +42,14 @@ const vector<int> & Customer::getOrdersIds() const{
 int Customer::addOrder(int orderId){
     if (canMakeOrder()){
         ordersId.push_back(orderId);
+        ordersLeft = ordersLeft -1;
         return orderId;
     }
     return -1;
 
-} 
 
+
+} 
 
 
 
