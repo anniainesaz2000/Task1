@@ -296,11 +296,19 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
  }
 
  void WareHouse::addOrder(Order* order){
-    pendingOrders.push_back(order); 
+    pendingOrders.push_back(order);
+    orderCounter = orderCounter +1;
  }
 
  void WareHouse::addAction(BaseAction* action){
     actionsLog.push_back(action);
+ }
+
+ void WareHouse::addCustomer(Customer* customer){
+    customers.push_back(customer);
+    customerCounter = customerCounter +1;
+
+
  }
 
 Customer& WareHouse::getCustomer(int customerId) const{
@@ -309,8 +317,8 @@ Customer& WareHouse::getCustomer(int customerId) const{
                 return *cust;
             }
         }
-
-        return nullptr;
+        SoldierCustomer customer (-1, "", -1, -1);
+        return customer;
 }
 
 Volunteer& WareHouse::getVolunteer(int volunteerId) const{
@@ -319,8 +327,9 @@ Volunteer& WareHouse::getVolunteer(int volunteerId) const{
                 return *vol;
             }
         }
-
-     return nullptr;
+    
+    CollectorVolunteer vol (-1, "", -1);
+     return vol;
     
     }
 
@@ -343,7 +352,8 @@ Volunteer& WareHouse::getVolunteer(int volunteerId) const{
             }
         }
 
-        return nullptr;
+        Order fictOrder(-1,-1,-1);
+        return fictOrder;
     }
 
 const vector<BaseAction*>& WareHouse::getActions() const{
@@ -365,10 +375,6 @@ vector<Order*> & WareHouse::getCompletedOrders(){
 
 vector<Volunteer*> & WareHouse::getVolunteers(){
     return volunteers;
-}
-
-void WareHouse::increaseOrderCounter(){
-    orderCounter = orderCounter + 1;
 }
 
 int WareHouse::getCustomerCounter(){
