@@ -56,11 +56,9 @@ DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int di
    }
 
    string DriverVolunteer::toString() const{
-   return ("id = " + std::to_string(getId()) + "\nVolunteer name = " + getName() +
-    "\ncompletedOrderId= " + std::to_string(completedOrderId) + "\nactiveOrderId =" + std::to_string(activeOrderId) +"\nmaxDistance = " + std::to_string(maxDistance) +
-    "\ndistancePerStep = " + std::to_string(distancePerStep) + "\ndistanceLeft = " + std::to_string(distanceLeft));
-   }
-
-   void DriverVolunteer::setDistanceLeft(int distanceLeft1){
-      distanceLeft = distanceLeft1;
+   return ("VolunteerId: " + std::to_string(getId()) +
+    "\nisBusy:" + std::to_string(isBusy()) +
+    "\naOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
+    "\nDistanceLeft: " + std::to_string(distanceLeft) + 
+    "\nOrdersLeft: No Limit" );
    }
