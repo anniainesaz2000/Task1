@@ -46,12 +46,11 @@ std::string Order::orderStatusToString(OrderStatus status)const {
 
  const string Order::toString() const{
     return (
-        "id = " + std::to_string(id) +
-        "\ncustomerId = " + std::to_string(customerId) +
-        "\ndistance = " + std::to_string(distance) +
-        "\nstatus = " + orderStatusToString(status) +
-        "\ncollectorId = " + std::to_string(collectorId) +
-        "\ndriverId = " + std::to_string(driverId)
+        "OrderId: " + std::to_string(id) +
+        "\nOrderStatus: " + orderStatusToString(status) +
+        "\nCustomerId: " + std::to_string(customerId) +
+        "\nCollector: " + ((collectorId == NO_VOLUNTEER) ? "None":std::to_string(collectorId)) +
+        "\nDriver: " + ((driverId == NO_VOLUNTEER) ? "None":std::to_string(driverId))
     );
  }
 
@@ -60,6 +59,10 @@ int Order::getDistance() const{
     return distance;
 }
 
+
+ Order* Order::clone() const{
+    return new Order(*this);
+ }
 
 
 
