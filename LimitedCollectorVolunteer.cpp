@@ -39,7 +39,7 @@
 void LimitedCollectorVolunteer::acceptOrder(const Order &order){
     if(canTakeOrder(order)){
         CollectorVolunteer::acceptOrder(order);
-        ordersLeft = ordersLeft-1;
+        decreaseOrdersLeft();
     }
     
     }
@@ -58,7 +58,12 @@ void LimitedCollectorVolunteer::decreaseOrdersLeft(){
 }
 
 string LimitedCollectorVolunteer::toString() const{
-    return (CollectorVolunteer::toString() + "\n maxOrders = " + std::to_string(maxOrders) +"\nordersLeft = " + std::to_string(ordersLeft));
+    return ("VolunteerId: " + std::to_string(getId()) +
+    "\nisBusy:" + std::to_string(isBusy()) +
+    "\naOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
+    "\nTimeLeft: " + std::to_string(getTimeLeft()) + 
+    "\nOrdersLeft: " + std::to_string(ordersLeft));
+ 
 }
 
 
