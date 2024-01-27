@@ -57,9 +57,11 @@
  }
 
  string CollectorVolunteer::toString() const {//we deleted override
-    return ("id = " + std::to_string(getId()) + "\nVolunteer name = " + getName() +
-    "\ncompletedOrderId= " + std::to_string(completedOrderId) + "\nactiveOrderId =" + std::to_string(activeOrderId) +"\ncoolDown = " + std::to_string(coolDown)+
-    "\ntimeLeft = " + std::to_string(timeLeft));
+    return ("VolunteerId: " + std::to_string(getId()) +
+    "\nisBusy:" + std::to_string(isBusy()) +
+    "\naOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
+    "\nTimeLeft: " + std::to_string(timeLeft) + 
+    "\nOrdersLeft: No Limit" );
  }
 
 
