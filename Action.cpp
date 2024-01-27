@@ -32,6 +32,8 @@ void SimulateStep::act(WareHouse &wareHouse){
     for(int i=0; i<numOfSteps; i++){
         actOneStep(wareHouse);
     }
+    complete();
+    wareHouse.addAction(SimulateStep::clone());
 }
 
 
@@ -181,7 +183,7 @@ AddOrder:: AddOrder(int id):BaseAction(),customerId(id){
 void AddOrder::act(WareHouse &wareHouse){
     auto customer = wareHouse.getCustomer(customerId);
 
-    if(customer==nullptr ||  !customer.canMakeOrder()){
+    if(customer.getId()==-1 ||  !customer.canMakeOrder()){
         error("Cannot place this order");
     }
 
@@ -190,9 +192,11 @@ void AddOrder::act(WareHouse &wareHouse){
         Order order (wareHouse.getCustomerCounter(), customerId,customer.getCustomerDistance());
         order.setStatus(OrderStatus::PENDING);
         wareHouse.addOrder(&order);
-        wareHouse.increaseOrderCounter();
+        complete();
 
     }
+
+    wareHouse.addAction(AddOrder::clone());
 
 }
 
@@ -208,167 +212,212 @@ string AddOrder::toString() const{
  //finished AddOrder--------------------------------------------------------------------
  //AddCustomer
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////////////////////////////////////
-
-
-// PrintOrderStatus::PrintOrderStatus(int id):orderId(id){
-
-// }
-// PrintOrderStatus::act(WareHouse &wareHouse){
-    
-//     if (wareHouse.getOrder(orderId) == nullptr){
-//         return error("order does not exist");
-//     }
-//     else{
-//         Order order = *(wareHouse.getOrder(orderId));   
-//         OrderStatus orderStatus = wareHouse.getOrder(orderId).getStatus(); //in the stack, suppose to be deleted at the end of AF
-//         cout << "Order " + std::to_string(orderId) +
-//          "\nOrderStatus: " orderStatusToString(orderStatus) +
-//          "\nCustomerId:" + std::to_string(order.getCustomerId()) +
-//          "\nCollector" + std::to_string(order.getCollectorId()) +  // it is written the suppose to print None if there is no collector etc
-//          "\nDriver" + std::to_string(order.getDriverId()) +
-//          << endl;
-//          status(ActionStatus::COMPLETED);
-//     }
-
-// }
-// PrintOrderStatus::PrintOrderStatus *clone() const{
-//     return new PrintOrderStatus(*this);
-// }
-// PrintOrderStatus::string toString() const{
-//     return "PrintOrderStatus " + std::to_string(orderId);
+AddCustomer::AddCustomer(string customerName1, string customerType1, int distance1, int maxOrders1):BaseAction(),customerName(customerName1),customerType((customerType1=="soldier") ? CustomerType::Soldier:CustomerType::Civilian),distance(distance1),maxOrders(maxOrders1){
+  
 }
-//////////////////////////////////////////////////////////////////////////////
+
+void AddCustomer::act(WareHouse &wareHouse){
+    int id = wareHouse.getCustomerCounter();
+    if (customerType==CustomerType::Soldier){
+        SoldierCustomer soldier (id, customerName, distance, maxOrders);
+        wareHouse.addCustomer(&soldier);
+   }
+
+   else{
+        CivilianCustomer civilian (id, customerName, distance, maxOrders);
+        wareHouse.addCustomer(&civilian);
+   }
+
+   complete();
+   wareHouse.addAction(AddCustomer::clone());
+
+}
+
+AddCustomer* AddCustomer::clone() const{
+    return new AddCustomer(*this);
+}
+
+string AddCustomer::toString() const{
+    return ("customer " + customerName + " "  + customerTypeToString(customerType) + " " + std::to_string(distance) +" " +  std::to_string(maxOrders));
+}
+
+string AddCustomer::customerTypeToString(CustomerType customerType)const{
+    if(customerType == CustomerType::Soldier){
+        return "soldier";
+    }
+
+    else{
+        return "civilian";
+    }
+
+}
+
+//finished AddCustomer--------------------------------------------------------------------
+//PrintOrderStatus
+
+PrintOrderStatus::PrintOrderStatus(int id):BaseAction(), orderId(id){
+
+}
+
+void PrintOrderStatus::act(WareHouse &wareHouse){
+    
+    if (wareHouse.getOrder(orderId).getId() == -1){
+        error("order does not exist");
+    }
+    else{
+        Order order = wareHouse.getOrder(orderId);   
+        cout << order.toString() << endl;
+        complete();
+    }
+
+    wareHouse.addAction(PrintOrderStatus::clone());
+
+}
+
+PrintOrderStatus* PrintOrderStatus:: clone() const{
+    return new PrintOrderStatus(*this);
+}
+
+string PrintOrderStatus::toString() const{
+    return ("PrintOrderStatus= " + std::to_string(orderId));
+}
+//finished PrintOrderStatus--------------------------------------------------------------------
+//PrintCustomerStatus
+
+PrintCustomerStatus::PrintCustomerStatus(int customerId1):BaseAction(),customerId(customerId1){
+    
+}
+
+void PrintCustomerStatus::act(WareHouse &wareHouse){
+    auto customer = wareHouse.getCustomer(customerId);
+    if(customer.getId() == -1){
+        error("Customer doesn't exist");
+    }
+
+    else{
+        string output = "CustomerId: " + std::to_string(customerId);
+        auto ordersIds = customer.getOrdersIds();
+        for(int id:ordersIds){
+            Order order = wareHouse.getOrder(id);
+            string status = order.orderStatusToString(order.getStatus());
+            output = output +"\nOrderId: " + std::to_string(id) +
+            "\nOrderStatus: " + status;
+
+        }
+
+        output = output + "\n numOrdersLeft: " + std::to_string(customer.getOrdersLeft());
+        cout << output << endl;
+        complete();
+    }
+
+    wareHouse.addAction(PrintCustomerStatus::clone());
+        
+
+    }
+
+PrintCustomerStatus* PrintCustomerStatus::clone() const{
+    return new PrintCustomerStatus(*this);
+}
+
+string PrintCustomerStatus::toString() const{
+    return ("customerId:" + std::to_string(customerId));
+}
+
+//finished PrintCustomerStatus--------------------------------------------------------------------
+//PrintVolunteerStatus
+
+PrintVolunteerStatus::PrintVolunteerStatus(int id):BaseAction(), VolunteerId(id){
+}
+
+void PrintVolunteerStatus::act(WareHouse &wareHouse){
+    auto vol = wareHouse.getVolunteer(VolunteerId);
+    if(vol.getId()==-1){
+        error("volunteer does not exist");
+    }
+    else{
+         cout << vol.toString() << endl;
+         complete();
+    }
+
+    wareHouse.addAction(PrintVolunteerStatus::clone());
+
+}
+
+PrintVolunteerStatus* PrintVolunteerStatus::clone() const{
+    return new PrintVolunteerStatus(*this);
+}
+
+string PrintVolunteerStatus::toString() const{
+    return ("VolunteerId: " +  std::to_string(VolunteerId));
+}
+
+//finished PrintVolunteerStatus--------------------------------------------------------------------
+//PrintActionsLog
+
+PrintActionsLog::PrintActionsLog():BaseAction(){}
+
+void PrintActionsLog::act(WareHouse &wareHouse){
+    auto actionsLog = wareHouse.getActions();
+    string output = "";
+    for(auto action:actionsLog){
+        output = output + "\n" +  actionTypeToString(action) +
+        action->toString() + PrintActionsLog::actionStatusToString(action->getStatus());
+    }
+
+    cout << output << endl;
+
+}
+
+string PrintActionsLog::actionTypeToString(BaseAction* action)const{
+    if(typeid(*action) == typeid(SimulateStep)){
+        return "SimulateStep";
+    }
+
+    else if(typeid(*action) == typeid(AddOrder)){
+        return "AddOrder";
+    }
+
+    else if(typeid(*action) == typeid(AddCustomer)){
+        return "AddCustomer";
+    }
+
+    else if(typeid(*action) == typeid(PrintOrderStatus)){
+        return "PrintOrderStatus";
+    }
+
+    else if(typeid(*action) == typeid(PrintCustomerStatus)){
+        return "PrintCustomerStatus";
+    }
+
+     else if(typeid(*action) == typeid(PrintVolunteerStatus)){
+        return "PrintVolunteerStatus";
+    }
+
+}
+
+std::string PrintActionsLog::actionStatusToString(ActionStatus status)const {
+    switch (status) {
+        case ActionStatus::COMPLETED:
+            return "COMPLETED";
+        case ActionStatus::ERROR:
+            return "ERROR";
+        default:
+            return "UNDEFINED";
+    }
+}
+
+PrintActionsLog* PrintActionsLog::clone() const{
+    return new PrintActionsLog(*this);
+}
+
+string PrintActionsLog::toString() const{
+    return "";
+}
+
+//finished PrintActionsLog--------------------------------------------------------------------
+//Close
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////
-// PrintVolunteerStatus::PrintVolunteerStatus(int id):volunteerId(id){
-// }
-// PrintVolunteerStatus::act(WareHouse &wareHouse){
-//     if(wareHouse.getVolunteer(volunteerId) == nullptr){
-//         return error("volunteer does not exist");
-//     }
-//     else{
-//         Volunteer volunteer = *(wareHouse.getVolunteer(volunteerId));
-
-//         //if volunteer is a LimitedCollector
-//         if(typeid(volunteer) == typeid(CollectorVolunteer)){
-//             if( typeid(volunteer) == typeid(LimitedCollectorVolunteer)){
-//                 if(volunteer.isBusy() == false){
-//                       cout << 
-//                        "Volunteer " + std::to_string(volunteerId) +
-//                         "\nisBusy: " + "False" +
-//                         "\nOrderId: " + "None" +
-//                         "\nTimeLeft: " + "None" +
-//                         "\nOrdersLeft: " + std::to_string(volunteer.getNumOrders()) +
-//                         << endl;
-//                 }
-//                 else{ // isBusy() == true
-//                     cout << 
-//                       "Volunteer " + std::to_string(volunteerId) +
-//                        "\nisBusy: " + "True" +
-//                        "\nOrderId: " + std::to_string(volunteer.getActiveOrderId()) +
-//                         "\nTimeLeft: " + std::to_string(volunteer.getTimeLeft()) +
-//                        "\nOrdersLeft: " + std::to_string(volunteer.getNumOrders()) +
-//                     << endl;
-//                 }
-//             }
-//             // volunteer is a Collector
-//             else if (volunteer.isBusy() == false) {
-//                 cout << 
-//                        "Volunteer " + std::to_string(volunteerId) +
-//                         "\nisBusy: " + "False" +
-//                         "\nOrderId: " + "None" +
-//                         "\nTimeLeft: " + "None" +
-//                         "\nOrdersLeft: " + "No Limit" +
-//                         << endl;
-//                 }
-//                 else{ // isBusy() == true
-//                 cout << 
-//                       "Volunteer " + std::to_string(volunteerId) +
-//                        "\nisBusy: " + "True" +
-//                        "\nOrderId: " + std::to_string(volunteer.getActiveOrderId()) +
-//                         "\nTimeLeft: " + std::to_string(volunteer.getTimeLeft()) +
-//                        "\nOrdersLeft: " + "No Limit" +
-//                     << endl;
-//             }
-//         }
-//         //volunteer is driver
-//         else{ //LimitedDriverVolunteer
-//             if(typeid(volunteer) == typeid(LimitedDriverVolunteer)){
-//                 if (volunteer.isBusy() == false){
-//                     cout << 
-//                         "Volunteer " + std::to_string(volunteerId) +
-//                         "\nisBusy: " + "False" +
-//                         "\nOrderId: " + "None" +
-//                         "\nDistanceLeft: " + "None" +
-//                         "\nOrdersLeft: " + std::to_string(volunteer.getNumOrders()) +
-//                         << endl;
-//              }
-//                 else{ // isBusy() == true
-//                         cout << 
-//                             "Volunteer " + std::to_string(volunteerId) +
-//                             "\nisBusy: " + "True" +
-//                             "\nOrderId: " + std::to_string(volunteer.getActiveOrderId()) +
-//                             "\nDistanceLeft: " + std::to_string(volunteer.getDistanceLeft()) +
-//                             "\nOrdersLeft: " + std::to_string(volunteer.getNumOrders()) +
-//                         << endl;
-//                 }
-//              }
-//              else{ //DriverVolunteer
-//                     if (volunteer.isBusy() == false){
-//                         cout << 
-//                             "Volunteer " + std::to_string(volunteerId) +
-//                             "\nisBusy: " + "False" +
-//                             "\nOrderId: " + "None" +
-//                             "\nDistanceLeft: " + "None" +
-//                             "\nOrdersLeft: " + "No Limit" +
-//                             << endl;
-//                 }
-//                     else{ // isBusy() == true
-//                             cout << 
-//                                 "Volunteer " + std::to_string(volunteerId) +
-//                                 "\nisBusy: " + "True" +
-//                                 "\nOrderId: " + std::to_string(volunteer.getActiveOrderId()) +
-//                                 "\nDistanceLeft: " + std::to_string(volunteer.getDistanceLeft()) +
-//                                 "\nOrdersLeft: " + "No Limit" +
-//                             << endl;
-//                     }
-//              }
-//             }   
-//     }
-// }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
