@@ -6,6 +6,7 @@ using namespace std;
 #include "../include/Order.h"
 #include "../include/Customer.h"
 #include "../include/Volunteer.h"
+#include "../include/Action.h"
 
 class BaseAction;
 class Volunteer;
