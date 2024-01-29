@@ -2,42 +2,35 @@
 #include "../include/WareHouse.h"
 
 
-//rule of 5!!!!!!!!!!!!!!!!
-
- WareHouse::WareHouse(const string &configFilePath){
+WareHouse::WareHouse(const string &configFilePath){
     //parse first
- }
+}
 
- // copy constructor
+//rule of 5:
+// copy constructor
 WareHouse::WareHouse(const WareHouse &other):isOpen(other.isOpen),actionsLog(other.actionsLog),volunteers(other.volunteers),pendingOrders(other.pendingOrders),inProcessOrders(other.inProcessOrders),completedOrders(other.completedOrders),customers(other.customers),customerCounter(other.customerCounter),volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
-    for (BaseAction* action : other.actionsLog){
-        actionsLog.push_back(&(*action.clone()));
-
+    for (BaseAction* action : other.actionsLog) {
+        actionsLog.push_back(action->clone());
     }
 
-    for (Volunteer* vol : other.volunteers){
-        actionsLog.push_back(&(*vol.clone()));
-
+    for (Volunteer* vol : other.volunteers) {
+        volunteers.push_back(vol->clone());
     }
 
-    for (Order* penOrder : other.pendingOrders){
-        actionsLog.push_back(&(*penOrder.clone()));
-
+    for (Order* penOrder : other.pendingOrders) {
+        pendingOrders.push_back(penOrder->clone());
     }
 
-    for (Order* inProOrder : other.inProcessOrders){
-        actionsLog.push_back(&(*inProOrder).clone());
-
+    for (Order* inProOrder : other.inProcessOrders) {
+        inProcessOrders.push_back(inProOrder->clone());
     }
 
-    for (Order* compOrder : other.completedOrders){
-        actionsLog.push_back(&(*compOrder).clone());
-
+    for (Order* compOrder : other.completedOrders) {
+        completedOrders.push_back(compOrder->clone());
     }
 
-     for (Customer* cust : other.customers){
-        actionsLog.push_back(&(*cust).clone());
-
+    for (Customer* cust : other.customers) {
+        customers.push_back(cust->clone());
     }
 
 
@@ -82,122 +75,106 @@ WareHouse::WareHouse(WareHouse &&other):isOpen(other.isOpen),actionsLog(other.ac
     }
     }
 
-//Destructor
+ //Destructor
 
-WareHouse::~Warehouse(){
+WareHouse::~WareHouse(){
 
-    delete isOpen;
-
-    for (int i = 0; i < int(actionsLog.size()); i++){
-        delete actionsLog.at(i);
+    for(BaseAction* act: actionsLog){
+        delete act;
     }
+    actionsLog.clear();
 
-    delete actionsLog;
-
-    for (int i = 0; i < int(volunteers.size()); i++){
-        delete volunteers.at(i);
+    for(Volunteer* vol: volunteers ){
+        delete vol;
     }
+    volunteers.clear();
 
-    delete volunteers;
-        
-    for (int i=0; i < int(pendingOrders.size()); i++){
-        delete pendingOrders.at(i);
+    for(Order* penOrd: pendingOrders ){
+        delete penOrd;
     }
+    pendingOrders.clear();
 
-    delete pendingOrders;
-
-    for (int i=0; i < int(inProcessOrders.size()); i++){
-        delete inProcessOrders.at(i);
+    for(Order* inPOrd: inProcessOrders ){
+        delete inPOrd;
     }
+    inProcessOrders.clear();
 
-    delete inProcessOrders;
-
-    for (int i=0; i < int(completedOrders.size()); i++){
-        delete completedOrders.at(i);
+    for(Order* comOrd: completedOrders ){
+        delete comOrd;
     }
+    completedOrders.clear();
 
-    delete completedOrders;
-
-    for (int i=0; i < int(customers.size()); i++){
-        delete customers.at(i);
+    for(Customer* cust: customers ){
+        delete cust;
     }
+    customers.clear();
 
-    delete customers;
-    
-    delete customerCounter;
-    delete volunteerCounter;
-    delete countIdOrder;
     }
 
 //copy assignment operator
 
 WareHouse& WareHouse::operator=(const WareHouse &other){
-    if (this != &other){
+     if (this != &other) {
         isOpen = other.isOpen;
         customerCounter = other.customerCounter;
         volunteerCounter = other.volunteerCounter;
         orderCounter = other.orderCounter;
 
-        for (BaseAction* action : actionsLog){
+        // Clear existing data
+        for (BaseAction* action : actionsLog) {
             delete action;
         }
-
         actionsLog.clear();
 
-        for (BaseAction* action : other.actionsLog){
-            actionsLog.push_back(&(*action.clone()));
-        }
-
-        for (Volunteer* vol : volunteers){
+        for (Volunteer* vol : volunteers) {
             delete vol;
         }
-
         volunteers.clear();
 
-        for (Volunteer* vol : other.volunteers){
-            actionsLog.push_back(&(*vol.clone()));
-        }
-
-        for (Order* penOrder : pendingOrders){
+        for (Order* penOrder : pendingOrders) {
             delete penOrder;
         }
-
         pendingOrders.clear();
 
-        for (Order* penOrder : other.pendingOrders){
-            actionsLog.push_back(&(*penOrder.clone()));
-        }
-
-        for (Order* inProOrder : inProcessOrders){
+        for (Order* inProOrder : inProcessOrders) {
             delete inProOrder;
         }
-
         inProcessOrders.clear();
 
-        for (Order* inProOrder : other.inProcessOrders){
-            actionsLog.push_back(&(*inProOrder.clone()));
-        }
-
-        for (Order* compOrder : completedOrders){
+        for (Order* compOrder : completedOrders) {
             delete compOrder;
         }
-
         completedOrders.clear();
 
-        for (Order* compOrder : other.completedOrders){
-            actionsLog.push_back(&(*compOrder.clone()));
-        }
-
-        for (Customer* cust : customers){
+        for (Customer* cust : customers) {
             delete cust;
         }
-
         customers.clear();
 
-        for (Customer* cust : other.customers){
-            actionsLog.push_back(*cust.clone());
+        // Copy new data
+        for (BaseAction* action : other.actionsLog) {
+            actionsLog.push_back(action->clone());
         }
 
+        for (Volunteer* vol : other.volunteers) {
+            volunteers.push_back(vol->clone());
+        }
+
+        for (Order* penOrder : other.pendingOrders) {
+            pendingOrders.push_back(penOrder->clone());
+        }
+
+        for (Order* inProOrder : other.inProcessOrders) {
+            inProcessOrders.push_back(inProOrder->clone());
+        }
+
+        for (Order* compOrder : other.completedOrders) {
+            completedOrders.push_back(compOrder->clone());
+        }
+
+        for (Customer* cust : other.customers) {
+            customers.push_back(cust->clone());
+        }
     }
 
     return *this;
@@ -383,9 +360,9 @@ int WareHouse::getCustomerCounter(){
 
 
 void WareHouse::close(){
- //use action close - elaborate in assignment 1
-
     isOpen = false;
+    delete this;//or copy the destructor?
+
 }
 
 void WareHouse::open(){
