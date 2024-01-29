@@ -129,11 +129,11 @@ void SimulateStep::checkCollectingOrderInProcess(WareHouse &wareHouse, Order& or
         order.setCollectorId(NO_VOLUNTEER);
         pendingOrders.push_back(&order);
         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
-        // if(typeid(collector) == typeid(LimitedCollectorVolunteer)){
-        //     if(collector.getNumOrdersLeft()==0){
-        //         delete (&collector);
-        //     }
-        // }
+        if(typeid(collector) == typeid(LimitedCollectorVolunteer)){
+            if(collector.getNumOrdersLeft()==0){
+                delete (&collector);
+            }
+        }
 
     }
 
@@ -152,11 +152,11 @@ void SimulateStep::checkDeliveringOrderInProcess(WareHouse &wareHouse, Order& or
         order.setDriverId(NO_VOLUNTEER);
         completedOrders.push_back(&order);
         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
-        // if(typeid(driver) == typeid(LimitedDriverVolunteer)){
-        //     if(driver.getNumOrdersLeft()==0){
-        //         delete driver;
-        //     }
-        // }
+        if(typeid(driver) == typeid(LimitedDriverVolunteer)){
+            if(driver.getNumOrdersLeft()==0){
+                delete (&driver);
+            }
+        }
 
     }
 
@@ -417,7 +417,81 @@ string PrintActionsLog::toString() const{
 //finished PrintActionsLog--------------------------------------------------------------------
 //Close
 
+Close::Close():BaseAction(){}
 
+void Close::act(WareHouse &wareHouse){
+    for (Order* penOrder : wareHouse.getPendingOrders()){
+         cout << penOrder->closeToString() << endl;
+    }
+    for (Order* ProOrder : wareHouse.getInProcessOrders()){
+         cout << ProOrder->closeToString() << endl;
+    }
+    for (Order* compOrder : wareHouse.getCompletedOrders()){
+         cout << compOrder->closeToString() << endl;
+    }
+
+    wareHouse.close();//check the close in wareHouse!!!!!!!!!!!
+    complete();
+
+}
+
+Close* Close::clone() const{
+    return new Close(*this);
+}
+
+string Close::toString() const{
+    return "";
+}
+
+//finished Close--------------------------------------------------------------------
+//BackupWareHouse
+
+BackupWareHouse::BackupWareHouse():BaseAction(){}
+
+void BackupWareHouse::act(WareHouse &wareHouse){
+    if(backup==nullptr){
+        backup = new WareHouse(wareHouse);
+    }
+
+    else{
+        *backup = wareHouse;
+    }
+
+    complete();
+}
+
+ BackupWareHouse* BackupWareHouse::clone() const{
+    return new BackupWareHouse(*this);
+ }
+
+ string BackupWareHouse::toString() const{
+    return "";
+ }
+
+//finished BackupWareHouse--------------------------------------------------------------------
+//RestoreWareHouse
+
+RestoreWareHouse::RestoreWareHouse():BaseAction(){}
+
+void RestoreWareHouse::act(WareHouse &wareHouse){
+    if(backup==nullptr){
+        error("No backup available");
+    }
+
+    else{
+         wareHouse = *backup;
+         complete();
+    }
+}
+
+ RestoreWareHouse* RestoreWareHouse::clone() const{
+    return new RestoreWareHouse(*this);
+ }
+
+ string RestoreWareHouse::toString() const{
+     return "";
+ }
+//finished RestoreWareHouse--------------------------------------------------------------------
 
 
 
