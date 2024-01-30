@@ -78,12 +78,12 @@ void SimulateStep::orderToCollectorVolunteer(WareHouse &wareHouse, Order& order,
     bool orderAccepted = false;
 
      for (int i = 0; !orderAccepted && i < int(volunteers.size()); i++){//need to be checked
-            auto volunteer = *(volunteers.at(i));
+            auto volunteer = volunteers.at(i);
 
-            if ((typeid(volunteer) == typeid(CollectorVolunteer) ||  typeid(volunteer) == typeid(LimitedCollectorVolunteer)) && (*(volunteers.at(i)).canTakeOrder(order))){//maybe we don't need or?
+            if ((typeid(*volunteer) == typeid(CollectorVolunteer) ||  typeid(*volunteer) == typeid(LimitedCollectorVolunteer)) && ((*volunteer).canTakeOrder(order))){//maybe we don't need or?
                 order.setStatus(OrderStatus::COLLECTING);
-                order.setCollectorId(volunteer.getId());
-                volunteer.acceptOrder(order);
+                order.setCollectorId((*volunteer).getId());
+                (*volunteer).acceptOrder(order);
                 orderAccepted = true;
                 inProcessOrders.push_back(&order);
                 pendingOrders.erase(pendingOrders.begin() + pendIndex);
@@ -102,12 +102,12 @@ void SimulateStep::orderToDriverVolunteer(WareHouse &wareHouse, Order& order, in
     bool orderAccepted = false;
 
      for (int i = 0; !orderAccepted && i < int(volunteers.size()); i++){//need to be checked
-            auto volunteer = *(volunteers.at(i));
+            auto volunteer = volunteers.at(i);
 
-            if ((typeid(volunteer) == typeid(DriverVolunteer) ||  typeid(volunteer) == typeid(LimitedDriverVolunteer)) && (*(volunteers.at(i)).canTakeOrder(order))){//maybe we don't need or?
+            if ((typeid(*volunteer) == typeid(DriverVolunteer) ||  typeid(*volunteer) == typeid(LimitedDriverVolunteer)) && ((*volunteer).canTakeOrder(order))){//maybe we don't need or?
                 order.setStatus(OrderStatus::DELIVERING);
-                order.setDriverId(volunteer.getId());
-                volunteer.acceptOrder(order);
+                order.setDriverId((*volunteer).getId());
+                (*volunteer).acceptOrder(order);
                 orderAccepted = true;
                 inProcessOrders.push_back(&order);
                 pendingOrders.erase(pendingOrders.begin() + pendIndex);
@@ -119,18 +119,18 @@ void SimulateStep::orderToDriverVolunteer(WareHouse &wareHouse, Order& order, in
 
 void SimulateStep::checkCollectingOrderInProcess(WareHouse &wareHouse, Order& order, int inProIndex){
     int collectorId = order.getCollectorId();
-    auto collector = wareHouse.getVolunteer(collectorId);
+    auto collector = &(wareHouse.getVolunteer(collectorId));
     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
 
-    collector.step();
+    static_cast<CollectorVolunteer*>(collector)->step();
 
-    if(collector.getTimeLeft()==0){
+    if(static_cast<CollectorVolunteer*>(collector)->getTimeLeft()==0){
         order.setCollectorId(NO_VOLUNTEER);
         pendingOrders.push_back(&order);
         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
         if(typeid(collector) == typeid(LimitedCollectorVolunteer)){
-            if(collector.getNumOrdersLeft()==0){
+            if(static_cast<LimitedCollectorVolunteer*>(collector)->getNumOrdersLeft()==0){
                 delete (&collector);
             }
         }
@@ -141,19 +141,19 @@ void SimulateStep::checkCollectingOrderInProcess(WareHouse &wareHouse, Order& or
 
 void SimulateStep::checkDeliveringOrderInProcess(WareHouse &wareHouse, Order& order, int inProIndex){
     int driverId = order.getDriverId();
-    auto driver = wareHouse.getVolunteer(driverId);
+    auto driver = &(wareHouse.getVolunteer(driverId));
     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
     vector<Order*> & completedOrders = wareHouse.getCompletedOrders();
 
-    driver.step();
+    static_cast<DriverVolunteer*>(driver)->step();
 
-    if(driver.getDistanceLeft()==0){
+    if(static_cast<DriverVolunteer*>(driver)->getDistanceLeft()==0){
         order.setStatus(OrderStatus::COMPLETED);
         order.setDriverId(NO_VOLUNTEER);
         completedOrders.push_back(&order);
         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
         if(typeid(driver) == typeid(LimitedDriverVolunteer)){
-            if(driver.getNumOrdersLeft()==0){
+            if(static_cast<LimitedDriverVolunteer*>(driver)->getNumOrdersLeft()==0){
                 delete (&driver);
             }
         }
@@ -181,19 +181,26 @@ AddOrder:: AddOrder(int id):BaseAction(),customerId(id){
 
 
 void AddOrder::act(WareHouse &wareHouse){
-    auto customer = wareHouse.getCustomer(customerId);
 
-    if(customer.getId()==-1 ||  !customer.canMakeOrder()){
-        error("Cannot place this order");
-    }
+    if(wareHouse.customerExist(customerId)){
+        auto customer = &(wareHouse.getCustomer(customerId));
 
+        if( !(*customer).canMakeOrder()){
+            error("Cannot place this order");
+        }
 
-    else{
-        Order order (wareHouse.getCustomerCounter(), customerId,customer.getCustomerDistance());
+        else{
+        Order order (wareHouse.getCustomerCounter(), customerId,(*customer).getCustomerDistance());
         order.setStatus(OrderStatus::PENDING);
         wareHouse.addOrder(&order);
         complete();
 
+    }
+
+    }
+
+    else{
+        error("Cannot place this order");
     }
 
     wareHouse.addAction(AddOrder::clone());
@@ -261,7 +268,7 @@ PrintOrderStatus::PrintOrderStatus(int id):BaseAction(), orderId(id){
 
 void PrintOrderStatus::act(WareHouse &wareHouse){
     
-    if (wareHouse.getOrder(orderId).getId() == -1){
+    if (!(wareHouse.orderExist(orderId))){
         error("order does not exist");
     }
     else{
@@ -289,14 +296,14 @@ PrintCustomerStatus::PrintCustomerStatus(int customerId1):BaseAction(),customerI
 }
 
 void PrintCustomerStatus::act(WareHouse &wareHouse){
-    auto customer = wareHouse.getCustomer(customerId);
-    if(customer.getId() == -1){
-        error("Customer doesn't exist");
-    }
 
+    if(!(wareHouse.customerExist(customerId))){
+         error("Customer doesn't exist");
+    }
     else{
+        auto customer = &(wareHouse.getCustomer(customerId));
         string output = "CustomerId: " + std::to_string(customerId);
-        auto ordersIds = customer.getOrdersIds();
+        auto ordersIds = (*customer).getOrdersIds();
         for(int id:ordersIds){
             Order order = wareHouse.getOrder(id);
             string status = order.orderStatusToString(order.getStatus());
@@ -305,7 +312,7 @@ void PrintCustomerStatus::act(WareHouse &wareHouse){
 
         }
 
-        output = output + "\n numOrdersLeft: " + std::to_string(customer.getOrdersLeft());
+        output = output + "\n numOrdersLeft: " + std::to_string((*customer).getOrdersLeft());
         cout << output << endl;
         complete();
     }
@@ -330,12 +337,12 @@ PrintVolunteerStatus::PrintVolunteerStatus(int id):BaseAction(), VolunteerId(id)
 }
 
 void PrintVolunteerStatus::act(WareHouse &wareHouse){
-    auto vol = wareHouse.getVolunteer(VolunteerId);
-    if(vol.getId()==-1){
+    auto vol = &(wareHouse.getVolunteer(VolunteerId));
+    if((*vol).getId()==-1){
         error("volunteer does not exist");
     }
     else{
-         cout << vol.toString() << endl;
+         cout << (*vol).toString() << endl;
          complete();
     }
 
@@ -393,6 +400,7 @@ string PrintActionsLog::actionTypeToString(BaseAction* action)const{
         return "PrintVolunteerStatus";
     }
 
+    return "";
 }
 
 std::string PrintActionsLog::actionStatusToString(ActionStatus status)const {
@@ -430,7 +438,7 @@ void Close::act(WareHouse &wareHouse){
          cout << compOrder->closeToString() << endl;
     }
 
-    wareHouse.close();//check the close in wareHouse!!!!!!!!!!!
+    wareHouse.close();
     complete();
 
 }
