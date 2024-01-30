@@ -17,6 +17,9 @@ class Volunteer;
 class WareHouse {
 
     public:
+        void parseVolunteer(const std::vector<std::string>& tokens);//we added it
+        void parseCustomer(const std::vector<std::string>& tokens);//we added it
+        std::vector<std::string> split(const std::string& s, char delimiter);//we added it
         WareHouse(const string &configFilePath);
         WareHouse(const WareHouse &other);//copy constructor
         WareHouse(WareHouse &&other);//move copt constructor//should be const? 
@@ -27,8 +30,11 @@ class WareHouse {
         void addOrder(Order* order);
         void addAction(BaseAction* action);
         void addCustomer(Customer* customer);//we added it
+        bool customerExist(int customerId) const;//we added it
         Customer &getCustomer(int customerId) const;
+        //bool volunteerExist(int volunteerId) const;//we added it
         Volunteer &getVolunteer(int volunteerId) const;
+        bool orderExist(int orderId) const;//we added it
         Order &getOrder(int orderId) const;
         const vector<BaseAction*> &getActions() const;
         vector<Order*> &getPendingOrders();//we added it
