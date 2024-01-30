@@ -17,12 +17,21 @@ void Order::setStatus(OrderStatus status1){
     status = status1;
 }
 
+ void Order::setCollectorId(int collectorId1){
+    collectorId = collectorId1;
+ }
+
 void Order::setDriverId(int driverId1){
     driverId = driverId1;
 }
 
 int Order::getCollectorId() const{
     return collectorId;
+}
+
+int Order::getDriverId() const{
+    return driverId;
+
 }
 
 OrderStatus Order::getStatus() const{
@@ -52,6 +61,14 @@ std::string Order::orderStatusToString(OrderStatus status)const {
         "\nCollector: " + ((collectorId == NO_VOLUNTEER) ? "None":std::to_string(collectorId)) +
         "\nDriver: " + ((driverId == NO_VOLUNTEER) ? "None":std::to_string(driverId))
     );
+ }
+
+ const string Order::closeToString() const{
+     return (
+        "OrderId: " + std::to_string(id) +
+        "\nCustomerId: " + std::to_string(customerId) +
+        "\nOrderStatus: " + orderStatusToString(status));
+
  }
 
 
