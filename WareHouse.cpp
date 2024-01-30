@@ -1,9 +1,93 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <sstream>
 #include "../include/WareHouse.h"
 
+// Split a string into a vector of substrings based on a delimiter
+std::vector<std::string> WareHouse::split(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::istringstream ss(s);
+    std::string token;
 
-WareHouse::WareHouse(const string &configFilePath){
-    //parse first
+    while (std::getline(ss, token, delimiter)) {
+        tokens.push_back(token);
+    }
+
+    return tokens;
+}
+
+void WareHouse::parseCustomer(const std::vector<std::string>& tokens) {
+        std::string name = tokens[1];
+        std::string customerType = tokens[2];
+        int distance = std::stoi(tokens[3]);
+        int maxOrders = std::stoi(tokens[4]);
+
+        if(customerType =="soldier"){
+            customers.push_back(new SoldierCustomer(customerCounter, name, distance, maxOrders));
+        }
+
+        else if (customerType =="civilian"){
+            customers.push_back(new CivilianCustomer(customerCounter, name, distance, maxOrders));
+        }
+
+        customerCounter = customerCounter +1;
+        //customers.emplace_back(name, customerType, distance, maxOrders);
+    }
+
+void WareHouse::parseVolunteer(const std::vector<std::string>& tokens) {
+        std::string name = tokens[1];
+        std::string role = tokens[2];
+        int maxDistance, distancePerStep, maxOrders, coolDown;
+
+        if (role == "driver") {
+            maxDistance = std::stoi(tokens[3]);
+            distancePerStep = std::stoi(tokens[4]);
+            volunteers.push_back(new DriverVolunteer(volunteerCounter,name, maxDistance, distancePerStep));
+        } else if(role == "limited_driver"){
+            maxDistance = std::stoi(tokens[3]);
+            distancePerStep = std::stoi(tokens[4]);
+            maxOrders = std::stoi(tokens[5]);
+            volunteers.push_back(new LimitedDriverVolunteer(volunteerCounter,name, maxDistance, distancePerStep, maxOrders));
+         }else if(role == "collector"){
+            coolDown = std::stoi(tokens[3]);
+            volunteers.push_back(new CollectorVolunteer(volunteerCounter,name, coolDown));
+         }
+         else if(role == "limited_collector"){
+            coolDown = std::stoi(tokens[3]);
+            maxOrders = std::stoi(tokens[4]);
+            volunteers.push_back(new LimitedCollectorVolunteer(volunteerCounter,name, coolDown, maxOrders));
+
+         }
+
+         volunteerCounter = volunteerCounter +1;
+
+        //volunteers.emplace_back(name, role, coolDown, maxDistance, distancePerStep, maxOrders);
+    }
+
+WareHouse::WareHouse(const string &configFilePath):isOpen(false),actionsLog(vector<BaseAction*>()), volunteers(vector<Volunteer*>()),pendingOrders(vector<Order*>()),inProcessOrders(vector<Order*>()),completedOrders(vector<Order*>()), customers(vector<Customer*>()) ,customerCounter(0), volunteerCounter(0), orderCounter(0){
+    start();
+     std::ifstream file(configFilePath);
+     std::string line;
+
+        while (std::getline(file, line)) {
+            if (line.empty() || line[0] == '#') {
+                // Skip empty lines and comments
+                continue;
+            }
+
+            std::vector<std::string> tokens = split(line, ' ');
+
+            if (tokens[0] == "customer") {
+                parseCustomer(tokens);
+            } else if (tokens[0] == "volunteer") {
+                parseVolunteer(tokens);
+            } else {
+                std::cerr << "Unknown type: " << tokens[0] << std::endl;
+            }
+        }
+
 }
 
 //rule of 5:
@@ -288,15 +372,34 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
 
  }
 
+ bool WareHouse::customerExist(int customerId) const{
+    if(0<customerId  && customerId<customerCounter){
+        return true;
+    }
+
+    return false;
+ }
+
 Customer& WareHouse::getCustomer(int customerId) const{
         for (Customer* cust : customers){
             if ((*cust).getId() == customerId){
                 return *cust;
             }
         }
-        SoldierCustomer customer (-1, "", -1, -1);
-        return customer;
+
+        return *customers.at(0);
 }
+
+//  bool WareHouse::volunteerExist(int volunteerId) const{
+//     for (Volunteer* vol : volunteers){
+//             if ((*vol).getId() == volunteerId){
+//                 return true;
+//             }
+//         }
+
+//     return false;
+//  }
+
 
 Volunteer& WareHouse::getVolunteer(int volunteerId) const{
      for (Volunteer* vol : volunteers){
@@ -304,11 +407,32 @@ Volunteer& WareHouse::getVolunteer(int volunteerId) const{
                 return *vol;
             }
         }
-    
-    CollectorVolunteer vol (-1, "", -1);
-     return vol;
+
+     return *volunteers.at(0);
     
     }
+
+bool WareHouse::orderExist(int orderId) const{
+         for (Order* penOrder : pendingOrders){
+            if ((*penOrder).getId() == orderId){
+                return true;
+            }
+        }
+
+         for (Order* inProOrder : inProcessOrders){
+            if ((*inProOrder).getId() == orderId){
+                return true;
+            }
+        }
+
+         for (Order* compOrder : completedOrders){
+            if ((*compOrder).getId() == orderId){
+                return true;
+            }
+        }
+
+        return false;
+}
 
  Order& WareHouse::getOrder(int orderId) const{
         for (Order* penOrder : pendingOrders){
@@ -329,8 +453,7 @@ Volunteer& WareHouse::getVolunteer(int volunteerId) const{
             }
         }
 
-        Order fictOrder(-1,-1,-1);
-        return fictOrder;
+        return *pendingOrders.at(0);
     }
 
 const vector<BaseAction*>& WareHouse::getActions() const{
@@ -361,7 +484,6 @@ int WareHouse::getCustomerCounter(){
 
 void WareHouse::close(){
     isOpen = false;
-    delete this;//or copy the destructor?
 
 }
 
