@@ -5,6 +5,7 @@
 using std::string;
 using std::vector;
 
+class WareHouse;
 extern WareHouse* backup;
 
 enum class ActionStatus{
@@ -21,6 +22,7 @@ class Customer;
 class BaseAction{
     public:
         BaseAction();
+        virtual ~BaseAction()=default; // we added it 
         ActionStatus getStatus() const;
         virtual void act(WareHouse& wareHouse)=0;
         virtual string toString() const=0;
