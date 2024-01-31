@@ -42,6 +42,7 @@ class WareHouse {
         vector<Order*> &getCompletedOrders();//we added it
         vector<Volunteer*> &getVolunteers();//we added it
         int getCustomerCounter();//we added it
+        int getOrderCounter();//we added it
 
         void close();
         void open();
