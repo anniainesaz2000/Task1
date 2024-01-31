@@ -31,7 +31,7 @@ class Customer {
         const string name;
         const int locationDistance;
         const int maxOrders;
-        const int ordersLeft;//we added it
+        int ordersLeft;//we added it
         vector<int> ordersId;
 };
 
