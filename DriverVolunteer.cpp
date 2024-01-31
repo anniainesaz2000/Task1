@@ -56,9 +56,9 @@ DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int di
    }
 
    string DriverVolunteer::toString() const{
-   return ("VolunteerId: " + std::to_string(getId()) +
-    "\nisBusy:" + std::to_string(isBusy()) +
-    "\naOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
+   return ("--------------------- \nVolunteerId: " + std::to_string(getId()) +
+    "\nisBusy:" + ((isBusy()) ? "True":"False" ) +
+    "\nOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
     "\nDistanceLeft: " + std::to_string(distanceLeft) + 
-    "\nOrdersLeft: No Limit" );
+    "\nOrdersLeft: No Limit" + "\n--------------------");
    }
