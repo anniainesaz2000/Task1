@@ -10,10 +10,6 @@
 
  }
 
- LimitedCollectorVolunteer::~LimitedCollectorVolunteer(){
-    delete this;
- }
-
  bool  LimitedCollectorVolunteer::hasOrdersLeft() const{//we dfeleted override
     if (ordersLeft>0){
         return true;
@@ -58,11 +54,11 @@ void LimitedCollectorVolunteer::decreaseOrdersLeft(){
 }
 
 string LimitedCollectorVolunteer::toString() const{
-    return ("VolunteerId: " + std::to_string(getId()) +
-    "\nisBusy:" + std::to_string(isBusy()) +
-    "\naOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
+    return ("--------------------- \nVolunteerId: " + std::to_string(getId()) +
+    "\nisBusy:" + ((isBusy()) ? "True":"False" ) +
+    "\nOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
     "\nTimeLeft: " + std::to_string(getTimeLeft()) + 
-    "\nOrdersLeft: " + std::to_string(ordersLeft));
+    "\nOrdersLeft: " + std::to_string(ordersLeft) + "\n---------------------");
  
 }
 
