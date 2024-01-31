@@ -67,7 +67,6 @@ void WareHouse::parseVolunteer(const std::vector<std::string>& tokens) {
     }
 
 WareHouse::WareHouse(const string &configFilePath):isOpen(false),actionsLog(vector<BaseAction*>()), volunteers(vector<Volunteer*>()),pendingOrders(vector<Order*>()),inProcessOrders(vector<Order*>()),completedOrders(vector<Order*>()), customers(vector<Customer*>()) ,customerCounter(0), volunteerCounter(0), orderCounter(0){
-    start();
      std::ifstream file(configFilePath);
      std::string line;
 
@@ -358,7 +357,7 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
 
  void WareHouse::addOrder(Order* order){
     pendingOrders.push_back(order);
-    orderCounter = orderCounter +1;
+    orderCounter = orderCounter + 1;
  }
 
  void WareHouse::addAction(BaseAction* action){
@@ -373,7 +372,7 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
  }
 
  bool WareHouse::customerExist(int customerId) const{
-    if(0<customerId  && customerId<customerCounter){
+    if(0<=customerId  && customerId<customerCounter){
         return true;
     }
 
@@ -453,7 +452,8 @@ bool WareHouse::orderExist(int orderId) const{
             }
         }
 
-        return *pendingOrders.at(0);
+        Order order(-1,-1,-1);
+        return order;
     }
 
 const vector<BaseAction*>& WareHouse::getActions() const{
@@ -480,6 +480,10 @@ vector<Volunteer*> & WareHouse::getVolunteers(){
 int WareHouse::getCustomerCounter(){
     return customerCounter;
 }
+
+ int WareHouse::getOrderCounter(){
+    return orderCounter;
+ }
 
 
 void WareHouse::close(){
