@@ -190,9 +190,10 @@ void AddOrder::act(WareHouse &wareHouse){
         }
 
         else{
-        Order order (wareHouse.getCustomerCounter(), customerId,(*customer).getCustomerDistance());
-        order.setStatus(OrderStatus::PENDING);
-        wareHouse.addOrder(&order);
+        Order* order = new Order (wareHouse.getOrderCounter(), customerId,(*customer).getCustomerDistance());
+        (*order).setStatus(OrderStatus::PENDING);
+        wareHouse.addOrder(order);
+        (*customer).addOrder((*order).getId());
         complete();
 
     }
@@ -213,7 +214,7 @@ AddOrder* AddOrder::clone() const{
 }
 
 string AddOrder::toString() const{
-    return ("Order " + std::to_string(customerId));
+    return (" Order " + std::to_string(customerId));
 }
 
  //finished AddOrder--------------------------------------------------------------------
@@ -226,13 +227,13 @@ AddCustomer::AddCustomer(string customerName1, string customerType1, int distanc
 void AddCustomer::act(WareHouse &wareHouse){
     int id = wareHouse.getCustomerCounter();
     if (customerType==CustomerType::Soldier){
-        SoldierCustomer soldier (id, customerName, distance, maxOrders);
-        wareHouse.addCustomer(&soldier);
+        SoldierCustomer* soldier = new  SoldierCustomer(id, customerName, distance, maxOrders);
+        wareHouse.addCustomer(soldier);
    }
 
    else{
-        CivilianCustomer civilian (id, customerName, distance, maxOrders);
-        wareHouse.addCustomer(&civilian);
+        CivilianCustomer* civilian = new CivilianCustomer(id, customerName, distance, maxOrders);
+        wareHouse.addCustomer(civilian);
    }
 
    complete();
@@ -245,7 +246,7 @@ AddCustomer* AddCustomer::clone() const{
 }
 
 string AddCustomer::toString() const{
-    return ("customer " + customerName + " "  + customerTypeToString(customerType) + " " + std::to_string(distance) +" " +  std::to_string(maxOrders));
+    return (" customer " + customerName + " "  + customerTypeToString(customerType) + " " + std::to_string(distance) +" " +  std::to_string(maxOrders));
 }
 
 string AddCustomer::customerTypeToString(CustomerType customerType)const{
@@ -273,7 +274,6 @@ void PrintOrderStatus::act(WareHouse &wareHouse){
     }
     else{
         Order order = wareHouse.getOrder(orderId);   
-        cout << order.toString() << endl;
         complete();
     }
 
@@ -286,7 +286,7 @@ PrintOrderStatus* PrintOrderStatus:: clone() const{
 }
 
 string PrintOrderStatus::toString() const{
-    return ("PrintOrderStatus= " + std::to_string(orderId));
+    return (" PrintOrderStatus= " + std::to_string(orderId));
 }
 //finished PrintOrderStatus--------------------------------------------------------------------
 //PrintCustomerStatus
@@ -302,7 +302,7 @@ void PrintCustomerStatus::act(WareHouse &wareHouse){
     }
     else{
         auto customer = &(wareHouse.getCustomer(customerId));
-        string output = "CustomerId: " + std::to_string(customerId);
+        string output = "--------------------- \nCustomerId: " + std::to_string(customerId);
         auto ordersIds = (*customer).getOrdersIds();
         for(int id:ordersIds){
             Order order = wareHouse.getOrder(id);
@@ -312,7 +312,7 @@ void PrintCustomerStatus::act(WareHouse &wareHouse){
 
         }
 
-        output = output + "\n numOrdersLeft: " + std::to_string((*customer).getOrdersLeft());
+        output = output + "\n numOrdersLeft: " + std::to_string((*customer).getOrdersLeft()) + + "\n--------------------- ";
         cout << output << endl;
         complete();
     }
@@ -327,7 +327,7 @@ PrintCustomerStatus* PrintCustomerStatus::clone() const{
 }
 
 string PrintCustomerStatus::toString() const{
-    return ("customerId:" + std::to_string(customerId));
+    return (" customerId: " + std::to_string(customerId));
 }
 
 //finished PrintCustomerStatus--------------------------------------------------------------------
@@ -355,7 +355,7 @@ PrintVolunteerStatus* PrintVolunteerStatus::clone() const{
 }
 
 string PrintVolunteerStatus::toString() const{
-    return ("VolunteerId: " +  std::to_string(VolunteerId));
+    return (" VolunteerId: " +  std::to_string(VolunteerId));
 }
 
 //finished PrintVolunteerStatus--------------------------------------------------------------------
@@ -368,7 +368,7 @@ void PrintActionsLog::act(WareHouse &wareHouse){
     string output = "";
     for(auto action:actionsLog){
         output = output + "\n" +  actionTypeToString(action) +
-        action->toString() + PrintActionsLog::actionStatusToString(action->getStatus());
+        action->toString() + " " + PrintActionsLog::actionStatusToString(action->getStatus());
     }
 
     cout << output << endl;
@@ -398,6 +398,14 @@ string PrintActionsLog::actionTypeToString(BaseAction* action)const{
 
      else if(typeid(*action) == typeid(PrintVolunteerStatus)){
         return "PrintVolunteerStatus";
+    }
+
+     else if(typeid(*action) == typeid(BackupWareHouse)){
+        return "BackupWareHouse";
+    }
+
+    else if(typeid(*action) == typeid(BackupWareHouse)){
+        return "RestoreWareHouse";
     }
 
     return "";
