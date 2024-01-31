@@ -9,10 +9,6 @@ LimitedDriverVolunteer* LimitedDriverVolunteer::clone() const{
     return new LimitedDriverVolunteer(*this);
 }
 
-LimitedDriverVolunteer::~LimitedDriverVolunteer(){
-    delete this;
- }
-
 int LimitedDriverVolunteer::getMaxOrders() const{
     return maxOrders;
 }
@@ -40,9 +36,9 @@ void LimitedDriverVolunteer::decreaseOrdersLeft(){
 }
 
 string LimitedDriverVolunteer::toString() const{
-      return ("VolunteerId: " + std::to_string(getId()) +
-    "\nisBusy:" + std::to_string(isBusy()) +
-    "\naOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
+      return ("--------------------- \nVolunteerId: " + std::to_string(getId()) +
+    "\nisBusy:" + ((isBusy()) ? "True":"False" ) +
+    "\nOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
     "\nDistanceLeft: " + std::to_string(getDistanceLeft()) + 
-    "\nOrdersLeft: " +  std::to_string(ordersLeft));
+    "\nOrdersLeft: " +  std::to_string(ordersLeft) + "\n---------------------");
 }
