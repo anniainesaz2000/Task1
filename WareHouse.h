@@ -32,10 +32,12 @@ class WareHouse {
         void addCustomer(Customer* customer);//we added it
         bool customerExist(int customerId) const;//we added it
         Customer &getCustomer(int customerId) const;
-        //bool volunteerExist(int volunteerId) const;//we added it
+        bool volunteerExist(int volunteerId) const;//we added it
         Volunteer &getVolunteer(int volunteerId) const;
         bool orderExist(int orderId) const;//we added it
         Order &getOrder(int orderId) const;
+        int getIndexInProcessOrder(int orderId)const;//we atded it
+        int getIndexInPendingOrder(int orderId)const;//we atded it
         const vector<BaseAction*> &getActions() const;
         vector<Order*> &getPendingOrders();//we added it
         vector<Order*> &getInProcessOrders();//we added it
@@ -58,4 +60,6 @@ class WareHouse {
         int customerCounter; //For assigning unique customer IDs
         int volunteerCounter; //For assigning unique volunteer IDs
         int orderCounter;//we added it
+
+
 };
