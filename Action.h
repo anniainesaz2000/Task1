@@ -44,10 +44,14 @@ class SimulateStep : public BaseAction {
         SimulateStep(int numOfSteps);
         void act(WareHouse &wareHouse) override;
         void actOneStep(WareHouse &wareHouse);
-        void orderToCollectorVolunteer(WareHouse &wareHouse, Order& Order, int pendIndex);//we added it
-        void orderToDriverVolunteer(WareHouse &wareHouse, Order& order, int pendIndex);//we added it
-        void checkCollectingOrderInProcess(WareHouse &wareHouse, Order& order, int pendIndex);//we added it
-        void checkDeliveringOrderInProcess(WareHouse &wareHouse, Order& order, int inProIndex);//we added it
+        //void orderToCollectorVolunteer(WareHouse &wareHouse, Order* Order);//we added it
+        //void orderToDriverVolunteer(WareHouse &wareHouse, Order* order);//we added it
+        // void checkCollectingOrderInProcess(WareHouse &wareHouse, Order* order);//we added it
+        // void checkDeliveringOrderInProcess(WareHouse &wareHouse, Order* order);//we added it
+        void orderToCollectorVolunteer(WareHouse &wareHouse, Volunteer* collector);//we added it
+        void orderToDriverVolunteer(WareHouse &wareHouse, Volunteer* driver);//we added it
+        void checkCollectorInProcess(WareHouse &wareHouse, Volunteer* collector);//we added it
+       void checkDriverInProcess(WareHouse &wareHouse, Volunteer* driver);//we added it
         std::string toString() const override;
         SimulateStep *clone() const override;
 
