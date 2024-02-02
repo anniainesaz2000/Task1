@@ -91,7 +91,7 @@ WareHouse::WareHouse(const string &configFilePath):isOpen(false),actionsLog(vect
 
 //rule of 5:
 // copy constructor
-WareHouse::WareHouse(const WareHouse &other):isOpen(other.isOpen),actionsLog(other.actionsLog),volunteers(other.volunteers),pendingOrders(other.pendingOrders),inProcessOrders(other.inProcessOrders),completedOrders(other.completedOrders),customers(other.customers),customerCounter(other.customerCounter),volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
+WareHouse::WareHouse(const WareHouse &other):isOpen(other.isOpen), actionsLog(other.actionsLog),volunteers(other.volunteers),pendingOrders(other.pendingOrders),inProcessOrders(other.inProcessOrders),completedOrders(other.completedOrders),customers(other.customers), customerCounter(other.customerCounter),volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
     for (BaseAction* action : other.actionsLog) {
         actionsLog.push_back(action->clone());
     }
@@ -148,12 +148,13 @@ WareHouse::WareHouse(WareHouse &&other):isOpen(other.isOpen),actionsLog(other.ac
 
     for (Order* compOrder : other.completedOrders){
         completedOrders.push_back(compOrder);
-        compOrder= nullptr;
+        compOrder = nullptr;
 
     }
 
      for (Customer* cust : other.customers){
         customers.push_back(cust);
+        cust = nullptr;
 
     }
     }
@@ -385,19 +386,19 @@ Customer& WareHouse::getCustomer(int customerId) const{
                 return *cust;
             }
         }
-
-        return *customers.at(0);
+        SoldierCustomer* fictCustomer = new SoldierCustomer(-1, "", -1, -1);
+        return *fictCustomer;
 }
 
-//  bool WareHouse::volunteerExist(int volunteerId) const{
-//     for (Volunteer* vol : volunteers){
-//             if ((*vol).getId() == volunteerId){
-//                 return true;
-//             }
-//         }
+ bool WareHouse::volunteerExist(int volunteerId) const{
+    for (Volunteer* vol : volunteers){
+            if ((*vol).getId() == volunteerId){
+                return true;
+            }
+        }
 
-//     return false;
-//  }
+    return false;
+ }
 
 
 Volunteer& WareHouse::getVolunteer(int volunteerId) const{
@@ -407,7 +408,8 @@ Volunteer& WareHouse::getVolunteer(int volunteerId) const{
             }
         }
 
-     return *volunteers.at(0);
+        CollectorVolunteer* fictVolunteer = new CollectorVolunteer(-1, "", -1);
+        return *fictVolunteer;
     
     }
 
@@ -452,9 +454,35 @@ bool WareHouse::orderExist(int orderId) const{
             }
         }
 
-        Order order(-1,-1,-1);
-        return order;
+        Order* fictOrder = new Order(-1, -1, -1);
+        return *fictOrder;
     }
+
+int WareHouse::getIndexInProcessOrder(int orderId)const{
+    int i = 0;
+    for (Order* inProOrder : inProcessOrders){
+            if ((*inProOrder).getId() == orderId){
+                return i;
+            }
+
+            i+=1;
+    }
+
+    return -1;
+}
+
+int WareHouse::getIndexInPendingOrder(int orderId)const{
+    int i = 0;
+    for (Order* pendOrder : pendingOrders){
+            if ((*pendOrder).getId() == orderId){
+                return i;
+            }
+
+            i+=1;
+    }
+
+    return -1;
+}
 
 const vector<BaseAction*>& WareHouse::getActions() const{
     return actionsLog;
