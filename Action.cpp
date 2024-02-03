@@ -37,7 +37,6 @@ SimulateStep::SimulateStep(int numOfSteps1):BaseAction(),numOfSteps(numOfSteps1)
         actOneStep(wareHouse);
     }
     complete();
-    wareHouse.addAction(SimulateStep::clone());
 }
 
 
@@ -237,8 +236,6 @@ void AddOrder::act(WareHouse &wareHouse){
         cout<< getErrorMsg() << endl;
     }
 
-    wareHouse.addAction(AddOrder::clone());
-
 }
 
 
@@ -270,7 +267,6 @@ void AddCustomer::act(WareHouse &wareHouse){
    }
 
    complete();
-   wareHouse.addAction(AddCustomer::clone());
 
 }
 
@@ -312,8 +308,6 @@ void PrintOrderStatus::act(WareHouse &wareHouse){
         complete();
     }
 
-    wareHouse.addAction(PrintOrderStatus::clone());
-
 }
 
 PrintOrderStatus* PrintOrderStatus:: clone() const{
@@ -353,7 +347,6 @@ void PrintCustomerStatus::act(WareHouse &wareHouse){
         complete();
     }
 
-    wareHouse.addAction(PrintCustomerStatus::clone());
         
 
     }
@@ -383,8 +376,6 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse){
          complete();
     }
 
-    wareHouse.addAction(PrintVolunteerStatus::clone());
-
 }
 
 PrintVolunteerStatus* PrintVolunteerStatus::clone() const{
@@ -410,7 +401,6 @@ void PrintActionsLog::act(WareHouse &wareHouse){
 
     cout << output << endl;
     complete();
-    wareHouse.addAction(PrintActionsLog::clone());
 
 }
 
@@ -430,7 +420,7 @@ PrintActionsLog* PrintActionsLog::clone() const{
 }
 
 string PrintActionsLog::toString() const{
-    return "";
+    return "log ";
 }
 
 //finished PrintActionsLog--------------------------------------------------------------------
@@ -477,7 +467,6 @@ void BackupWareHouse::act(WareHouse &wareHouse){
     }
 
     complete();
-    wareHouse.addAction(BackupWareHouse::clone());
 }
 
  BackupWareHouse* BackupWareHouse::clone() const{
@@ -503,7 +492,6 @@ void RestoreWareHouse::act(WareHouse &wareHouse){
          wareHouse = *backup;
          complete();
     }
-     wareHouse.addAction(RestoreWareHouse::clone());
 
 }
 
