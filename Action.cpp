@@ -20,10 +20,11 @@ void BaseAction::complete(){
 void BaseAction::error(string errorMsg1){
     errorMsg = errorMsg1;
     status = ActionStatus::ERROR;
+
 }
 
 string BaseAction::getErrorMsg() const{
-    return errorMsg;
+    return "Error:" + errorMsg;
 }
 
 //finished BaseAction------------------------------------------------------------------
@@ -150,7 +151,7 @@ void SimulateStep::checkCollectorInProcess(WareHouse &wareHouse, Volunteer* coll
     if(dynamic_cast<CollectorVolunteer*>(collector)->getTimeLeft()==0){
                 int orderId = collector->getCompletedOrderId();
                 Order* order = &(wareHouse.getOrder(orderId));
-                order->setCollectorId(NO_VOLUNTEER);
+                //order->setCollectorId(NO_VOLUNTEER);
                 pendingOrders.push_back(order);
                 int inProIndex = wareHouse.getIndexInProcessOrder(orderId);
                 inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
@@ -172,7 +173,7 @@ void SimulateStep::checkDriverInProcess(WareHouse &wareHouse, Volunteer* driver)
         int orderId = driver->getCompletedOrderId();
         Order* order = &(wareHouse.getOrder(orderId));
         order->setStatus(OrderStatus::COMPLETED);
-        order->setDriverId(NO_VOLUNTEER);
+        //order->setDriverId(NO_VOLUNTEER);
         completedOrders.push_back(order);
         int inProIndex = wareHouse.getIndexInProcessOrder(orderId);
         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
@@ -190,7 +191,7 @@ void SimulateStep::checkDriverInProcess(WareHouse &wareHouse, Volunteer* driver)
 
 
 std::string SimulateStep::toString() const{
-    return ("step = " + std::to_string(numOfSteps));
+    return ("simulateStep " + std::to_string(numOfSteps));
 
 }
 
@@ -217,6 +218,7 @@ void AddOrder::act(WareHouse &wareHouse){
 
         if( !(*customer).canMakeOrder()){
             error("Cannot place this order");
+            cout<< getErrorMsg() << endl;
         }
 
         else{
@@ -232,6 +234,7 @@ void AddOrder::act(WareHouse &wareHouse){
 
     else{
         error("Cannot place this order");
+        cout<< getErrorMsg() << endl;
     }
 
     wareHouse.addAction(AddOrder::clone());
@@ -301,6 +304,7 @@ void PrintOrderStatus::act(WareHouse &wareHouse){
     
     if (!(wareHouse.orderExist(orderId))){
         error("order does not exist");
+        cout<< getErrorMsg() << endl;
     }
     else{
         string output = wareHouse.getOrder(orderId).toString();   
@@ -317,7 +321,7 @@ PrintOrderStatus* PrintOrderStatus:: clone() const{
 }
 
 string PrintOrderStatus::toString() const{
-    return (" PrintOrderStatus= " + std::to_string(orderId));
+    return ("orderStatus " + std::to_string(orderId));
 }
 //finished PrintOrderStatus--------------------------------------------------------------------
 //PrintCustomerStatus
@@ -330,6 +334,7 @@ void PrintCustomerStatus::act(WareHouse &wareHouse){
 
     if(!(wareHouse.customerExist(customerId))){
          error("Customer doesn't exist");
+         cout<< getErrorMsg() << endl;
     }
     else{
         auto customer = &(wareHouse.getCustomer(customerId));
@@ -358,7 +363,7 @@ PrintCustomerStatus* PrintCustomerStatus::clone() const{
 }
 
 string PrintCustomerStatus::toString() const{
-    return (" customerId: " + std::to_string(customerId));
+    return ("customerStatus " + std::to_string(customerId));
 }
 
 //finished PrintCustomerStatus--------------------------------------------------------------------
@@ -371,6 +376,7 @@ void PrintVolunteerStatus::act(WareHouse &wareHouse){
     auto vol = &(wareHouse.getVolunteer(VolunteerId));
     if((*vol).getId()==-1){
         error("volunteer does not exist");
+        cout<< getErrorMsg() << endl;
     }
     else{
          cout << (*vol).toString() << endl;
@@ -386,7 +392,7 @@ PrintVolunteerStatus* PrintVolunteerStatus::clone() const{
 }
 
 string PrintVolunteerStatus::toString() const{
-    return (" VolunteerId: " +  std::to_string(VolunteerId));
+    return ("volunteerStatus " +  std::to_string(VolunteerId));
 }
 
 //finished PrintVolunteerStatus--------------------------------------------------------------------
@@ -403,6 +409,8 @@ void PrintActionsLog::act(WareHouse &wareHouse){
     }
 
     cout << output << endl;
+    complete();
+    wareHouse.addAction(PrintActionsLog::clone());
 
 }
 
@@ -468,8 +476,8 @@ void BackupWareHouse::act(WareHouse &wareHouse){
         *backup = wareHouse;
     }
 
-     wareHouse.addAction(BackupWareHouse::clone());
     complete();
+    wareHouse.addAction(BackupWareHouse::clone());
 }
 
  BackupWareHouse* BackupWareHouse::clone() const{
@@ -477,7 +485,7 @@ void BackupWareHouse::act(WareHouse &wareHouse){
  }
 
  string BackupWareHouse::toString() const{
-    return "";
+    return "backup ";
  }
 
 //finished BackupWareHouse--------------------------------------------------------------------
@@ -488,6 +496,7 @@ RestoreWareHouse::RestoreWareHouse():BaseAction(){}
 void RestoreWareHouse::act(WareHouse &wareHouse){
     if(backup==nullptr){
         error("No backup available");
+        cout<< getErrorMsg() << endl;
     }
 
     else{
@@ -503,6 +512,6 @@ void RestoreWareHouse::act(WareHouse &wareHouse){
  }
 
  string RestoreWareHouse::toString() const{
-     return "";
+     return "restore ";
  }
 //finished RestoreWareHouse--------------------------------------------------------------------
