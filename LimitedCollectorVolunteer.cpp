@@ -36,6 +36,7 @@ void LimitedCollectorVolunteer::acceptOrder(const Order &order){
     if(canTakeOrder(order)){
         CollectorVolunteer::acceptOrder(order);
         decreaseOrdersLeft();
+  
     }
     
     }
@@ -61,12 +62,3 @@ string LimitedCollectorVolunteer::toString() const{
     "\nOrdersLeft: " + std::to_string(ordersLeft) + "\n---------------------");
  
 }
-
-
-
-
-
-
-
-
-
