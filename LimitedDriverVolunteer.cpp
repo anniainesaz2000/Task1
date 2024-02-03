@@ -36,9 +36,9 @@ void LimitedDriverVolunteer::decreaseOrdersLeft(){
 }
 
 string LimitedDriverVolunteer::toString() const{
-      return ("--------------------- \nVolunteerId: " + std::to_string(getId()) +
+      return ("VolunteerId: " + std::to_string(getId()) +
     "\nisBusy:" + ((isBusy()) ? "True":"False" ) +
     "\nOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
     "\nDistanceLeft: " + std::to_string(getDistanceLeft()) + 
-    "\nOrdersLeft: " +  std::to_string(ordersLeft) + "\n---------------------");
+    "\nOrdersLeft: " +  std::to_string(ordersLeft));
 }
