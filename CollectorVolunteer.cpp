@@ -8,6 +8,7 @@
  CollectorVolunteer* CollectorVolunteer::clone() const{
     return new CollectorVolunteer(*this);
 
+
  }
 
 
@@ -54,15 +55,14 @@
     activeOrderId = order.getId();
     timeLeft = coolDown;
 
+
  }
+
 
  string CollectorVolunteer::toString() const {//we deleted override
-    return ("--------------------- \nVolunteerId: " + std::to_string(getId()) +
+    return ("VolunteerId: " + std::to_string(getId()) +
     "\nisBusy:" + ((isBusy()) ? "True":"False" )+
     "\nOrderId:" + ((activeOrderId == NO_ORDER) ? "None":std::to_string(activeOrderId)) +
-    "\nTimeLeft: " + std::to_string(timeLeft) + 
-    "\nOrdersLeft: No Limit" +"\n---------------------" );
+    "\nTimeLeft: " + ((timeLeft==0) ? "None" : std::to_string(timeLeft)) + 
+    "\nOrdersLeft: No Limit");
  }
-
-
-
