@@ -289,57 +289,85 @@ WareHouse& WareHouse::operator=(const WareHouse &other){
 
         ///////////////
         for (Volunteer* fictvol :FictVol) {
-            delete fictvol;
-            fictvol = nullptr;
+            if(fictvol!=nullptr){
+                delete fictvol;
+                fictvol = nullptr;
+            }
+
+            
         }
         FictVol.clear();
 
         for (Order* fictOrder : FictOrder) {
-            delete fictOrder;
-            fictOrder = nullptr;
+            if(fictOrder!=nullptr){
+                delete fictOrder;
+                fictOrder = nullptr;
+            }
+            
         }
         FictOrder.clear();
 
         for (Customer* fictCust : FictCust) {
-            delete fictCust;
-            fictCust = nullptr;
+            if(fictCust!=nullptr){
+                delete fictCust;
+                fictCust = nullptr;
+            }
+            
         }
         FictCust.clear();
         //////////////
 
         for (BaseAction* action : actionsLog) {
-            delete action;
-            action = nullptr;
+             if(action!=nullptr){
+                delete action;
+                action = nullptr;
+             }
+            
         }
         actionsLog.clear();
 
         for (Volunteer* vol : volunteers) {
+            if(vol!=nullptr){
             delete vol;
             vol = nullptr;
+            }
+           
         }
         volunteers.clear();
 
         for (Order* penOrder : pendingOrders) {
-            delete penOrder;
-            penOrder = nullptr;
+            if(penOrder!=nullptr){
+                delete penOrder;
+                penOrder = nullptr;
+            }
+            
         }
         pendingOrders.clear();
 
         for (Order* inProOrder : inProcessOrders) {
-            delete inProOrder;
-            inProOrder = nullptr;
+            if(inProOrder!=nullptr){
+                delete inProOrder;
+                inProOrder = nullptr;
+            }
+            
         }
         inProcessOrders.clear();
 
         for (Order* compOrder : completedOrders) {
-            delete compOrder;
-            compOrder = nullptr;
+            if(compOrder!=nullptr){
+                delete compOrder;
+                compOrder = nullptr;
+            }
+            
         }
         completedOrders.clear();
 
         for (Customer* cust : customers) {
-            delete cust;
-            cust = nullptr;
+             if(cust!=nullptr){
+                delete cust;
+                cust = nullptr;
+             }
+            
         }
         customers.clear();
 
@@ -396,7 +424,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
 
         ///////////////
         for (Volunteer* fictvol :FictVol) {
-            delete fictvol;
+            if(fictvol!=nullptr){
+                delete fictvol;
+            }
+            
         }
         FictVol.clear();
 
@@ -407,7 +438,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
 
 /////////
         for (Order* fictOrder : FictOrder) {
-            delete fictOrder;
+            if(fictOrder!=nullptr){
+                delete fictOrder;
+            }
+            
         }
         FictOrder.clear();
 
@@ -418,7 +452,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
 
 //////////
         for (Customer* fictCust : FictCust) {
-            delete fictCust;
+            if(fictCust!=nullptr){
+                delete fictCust;
+            }
+            
         }
         FictCust.clear();
 
@@ -430,7 +467,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
         //////////////
 
         for (BaseAction* action : actionsLog){
-            delete action;
+            if(action!=nullptr){
+                delete action;
+            }
+            
         }
 
         actionsLog.clear();
@@ -441,7 +481,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
         }
 
          for (Volunteer* vol : volunteers){
-            delete vol;
+            if(vol!=nullptr){
+                delete vol;
+            }
+            
         }
 
         volunteers.clear();
@@ -452,7 +495,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
         }
 
         for (Order* penOrder : pendingOrders){
-            delete penOrder;
+            if(penOrder!=nullptr){
+                delete penOrder;
+            }
+            
         }
 
         pendingOrders.clear();
@@ -463,7 +509,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
         }
 
          for (Order* inProOrder : inProcessOrders){
-            delete inProOrder;
+            if(inProOrder!=nullptr){
+                delete inProOrder;
+            }
+            
         }
 
         inProcessOrders.clear();
@@ -474,7 +523,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
         }
 
         for (Order* compOrder : completedOrders){
-            delete compOrder;
+            if(compOrder!=nullptr){
+                delete compOrder;
+            }
+           
         }
 
         completedOrders.clear();
@@ -485,7 +537,10 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
         }
 
         for (Customer* cust : customers){
-            delete cust;
+             if(cust!=nullptr){
+                delete cust;
+             }
+            
         }
 
         customers.clear();
