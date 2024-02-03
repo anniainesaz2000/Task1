@@ -1,8 +1,8 @@
-all:bin/main
+all:clean bin/warehouse
 
-bin/main: bin/Volunteer.o bin/CollectorVolunteer.o bin/LimitedCollectorVolunteer.o bin/DriverVolunteer.o bin/LimitedDriverVolunteer.o bin/Order.o bin/Customer.o bin/SoldierCustomer.o bin/CivilianCustomer.o bin/Action.o bin/WareHouse.o bin/main.o
+bin/warehouse: bin/Volunteer.o bin/CollectorVolunteer.o bin/LimitedCollectorVolunteer.o bin/DriverVolunteer.o bin/LimitedDriverVolunteer.o bin/Order.o bin/Customer.o bin/SoldierCustomer.o bin/CivilianCustomer.o bin/Action.o bin/WareHouse.o bin/main.o
 	@echo Linking
-	g++ -o bin/main bin/Volunteer.o bin/CollectorVolunteer.o bin/LimitedCollectorVolunteer.o bin/DriverVolunteer.o bin/LimitedDriverVolunteer.o bin/Order.o bin/Customer.o bin/SoldierCustomer.o bin/CivilianCustomer.o bin/Action.o bin/WareHouse.o bin/main.o
+	g++ -o bin/warehouse bin/Volunteer.o bin/CollectorVolunteer.o bin/LimitedCollectorVolunteer.o bin/DriverVolunteer.o bin/LimitedDriverVolunteer.o bin/Order.o bin/Customer.o bin/SoldierCustomer.o bin/CivilianCustomer.o bin/Action.o bin/WareHouse.o bin/main.o
 
 
 bin/Volunteer.o: src/Volunteer.cpp
@@ -42,4 +42,7 @@ bin/main.o: src/main.cpp
 	g++ -g -Wall -Weffc++ -std=c++11 -Include -c src/main.cpp -o bin/main.o
 
 clean:
-	@echo 'Cleaning'
+	rm -f bin/*
+
+run:
+	./bin/warehouse ./configFile.txt
