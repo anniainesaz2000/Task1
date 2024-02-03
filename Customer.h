@@ -11,7 +11,7 @@ class Order;
 class Customer {
     public:
         Customer(int id, const string &name, int locationDistance, int maxOrders);
-        virtual ~Customer()=default; // do we need 
+        virtual ~Customer()=default; //we added it
         const string &getName() const;
         int getId() const;
         int getCustomerDistance() const;
