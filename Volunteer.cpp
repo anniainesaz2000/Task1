@@ -23,9 +23,14 @@ int Volunteer::getCompletedOrderId() const{
 }
 
 bool Volunteer::isBusy() const{
-    //depends on other class, leave for later,need to change
+    if(activeOrderId!=NO_ORDER){
+        return true;
+    }
 
-    return true;
+    else{
+        return false;
+    }
+
 }
 
 
