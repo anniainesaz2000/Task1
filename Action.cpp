@@ -1,6 +1,9 @@
 #include <iostream>
 #include "../include/Action.h"
 #include <typeinfo>
+#include <vector>
+#include <algorithm>
+using std:: string;
 
 //BaseAction
 
@@ -26,174 +29,9 @@ string BaseAction::getErrorMsg() const{
 //finished BaseAction------------------------------------------------------------------
 //SimulateStep
 
-
-// SimulateStep::SimulateStep(int numOfSteps1):BaseAction(),numOfSteps(numOfSteps1){}
-
-// void SimulateStep::act(WareHouse &wareHouse){
-//     for(int i=0; i<numOfSteps; i++){
-//         actOneStep(wareHouse);
-//     }
-//     complete();
-//     wareHouse.addAction(SimulateStep::clone());
-// }
-
-
-// void SimulateStep::actOneStep(WareHouse &wareHouse){
-
-//     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
-//     for (Order* order : pendingOrders){
-//         if (order->getStatus() == OrderStatus::PENDING){
-//             SimulateStep::orderToCollectorVolunteer(wareHouse, order);
-//         }
-
-//         else if (order->getStatus() == OrderStatus::COLLECTING){
-//             SimulateStep::orderToDriverVolunteer(wareHouse, order);
-//         }
-
-
-//     }
-
-//     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-//     for (Order* order : inProcessOrders){
-
-//         if (order->getStatus() == OrderStatus::COLLECTING){
-//             SimulateStep::checkCollectingOrderInProcess(wareHouse, order);
-//         }
-
-//         else if (order->getStatus() == OrderStatus::DELIVERING){
-//             SimulateStep::checkDeliveringOrderInProcess(wareHouse,order);
-//         }
-
-
-//     }
-
-    
-// }
-
-// void SimulateStep::orderToCollectorVolunteer(WareHouse &wareHouse, Order* order){
-//     vector<Volunteer*> & volunteers = wareHouse.getVolunteers();
-//     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
-//     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-
-//      for (Volunteer* vol : volunteers){
-
-//             if ((typeid(*vol) == typeid(CollectorVolunteer) ||  typeid(*vol) == typeid(LimitedCollectorVolunteer)) && ((*vol).canTakeOrder(*order))){
-//                 order->setStatus(OrderStatus::COLLECTING);
-//                 order->setCollectorId(vol->getId());
-//                 vol->acceptOrder(*order);
-//                 inProcessOrders.push_back(order);
-//                 int pendIndex = wareHouse.getIndexInPendingOrder(order->getId());
-//                 pendingOrders.erase(pendingOrders.begin() + pendIndex);
-//                 break;
-
-//             }
-//         }
-
-// }
-
-
-// void SimulateStep::orderToDriverVolunteer(WareHouse &wareHouse, Order* order){
-//     vector<Volunteer*> & volunteers = wareHouse.getVolunteers();
-//     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
-//     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-
-//      for (Volunteer* vol : volunteers){
-
-//             if ((typeid(*vol) == typeid(DriverVolunteer) ||  typeid(*vol) == typeid(LimitedDriverVolunteer)) && (vol->canTakeOrder(*order))){
-//                 order->setStatus(OrderStatus::DELIVERING);
-//                 order->setDriverId((*vol).getId());
-//                 vol->acceptOrder(*order);
-//                 inProcessOrders.push_back(order);
-//                 int pendIndex = wareHouse.getIndexInPendingOrder(order->getId());
-//                 pendingOrders.erase(pendingOrders.begin() + pendIndex);
-
-//             }
-//         }
-
-// }
-
-// void SimulateStep::checkCollectingOrderInProcess(WareHouse &wareHouse, Order* order){
-//     int collectorId = order->getCollectorId();
-//     auto collector = &(wareHouse.getVolunteer(collectorId));
-//     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-//     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
-
-//     static_cast<CollectorVolunteer*>(collector)->step();
-
-//     if(static_cast<CollectorVolunteer*>(collector)->getTimeLeft()==0){
-//         order->setCollectorId(NO_VOLUNTEER);
-//         pendingOrders.push_back(order);
-//         int inProIndex = wareHouse.getIndexInProcessOrder(order->getId());
-//         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
-//         if(typeid(collector) == typeid(LimitedCollectorVolunteer)){
-//             if(static_cast<LimitedCollectorVolunteer*>(collector)->getNumOrdersLeft()==0){
-//                 delete (collector);
-//             }
-//         }
-
-//     }
-
-// }
-
-// void SimulateStep::checkDeliveringOrderInProcess(WareHouse &wareHouse, Order* order){
-//     int driverId = order->getDriverId();
-//     auto driver = &(wareHouse.getVolunteer(driverId));
-//     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-//     vector<Order*> & completedOrders = wareHouse.getCompletedOrders();
-
-//     static_cast<DriverVolunteer*>(driver)->step();
-
-//     if(static_cast<DriverVolunteer*>(driver)->getDistanceLeft()==0){
-//         order->setStatus(OrderStatus::COMPLETED);
-//         order->setDriverId(NO_VOLUNTEER);
-//         completedOrders.push_back(order);
-//         int inProIndex = wareHouse.getIndexInProcessOrder(order->getId());
-//         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
-//         if(typeid(driver) == typeid(LimitedDriverVolunteer)){
-//             if(static_cast<LimitedDriverVolunteer*>(driver)->getNumOrdersLeft()==0){
-//                 delete (driver);
-//             }
-//         }
-
-//     }
-
-// }
-
-// std::string SimulateStep::toString() const{
-//     return ("step = " + std::to_string(numOfSteps));
-
-// }
-
-// SimulateStep* SimulateStep::clone() const{
-//     return new SimulateStep(*this);
-
-// }
-
-//finished SimulateStep------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 SimulateStep::SimulateStep(int numOfSteps1):BaseAction(),numOfSteps(numOfSteps1){}
 
-void SimulateStep::act(WareHouse &wareHouse){
+ void SimulateStep::act(WareHouse &wareHouse){
     for(int i=0; i<numOfSteps; i++){
         actOneStep(wareHouse);
     }
@@ -203,129 +41,153 @@ void SimulateStep::act(WareHouse &wareHouse){
 
 
 void SimulateStep::actOneStep(WareHouse &wareHouse){
-
-    vector<Volunteer*> & volunteers= wareHouse.getVolunteers();
-
-    Order order(-1, -1, -1);
-    for (Volunteer* vol : volunteers) {
-        if(vol->canTakeOrder(order)){
-            if(typeid(*vol) == typeid(CollectorVolunteer) ||  typeid(*vol) == typeid(LimitedCollectorVolunteer)){
-                orderToCollectorVolunteer(wareHouse, vol);
-                
-            }
-
-            else{
-                orderToDriverVolunteer(wareHouse, vol);
-
-            }
-        }
-
-        else{
-            if(typeid(*vol) == typeid(CollectorVolunteer) ||  typeid(*vol) == typeid(LimitedCollectorVolunteer)){
-                checkCollectorInProcess(wareHouse, vol);
-                
-            }
-
-            else{
-                checkDriverInProcess(wareHouse, vol);
-
-            }
-            
-        }
-    }
+    step1(wareHouse);
+    step2(wareHouse);
 
     
-}
 
-void SimulateStep::orderToCollectorVolunteer(WareHouse &wareHouse, Volunteer* collector){
+    }
+
+void SimulateStep::step1(WareHouse &wareHouse){
+    vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
+
+    for (auto it = pendingOrders.begin(); it != pendingOrders.end();) {
+        if ((*it)->getStatus() == OrderStatus::PENDING) {
+              if(orderToCollectorVolunteer(wareHouse, *it)){
+                --it;
+              }
+              
+
+        } else {
+            if(orderToDriverVolunteer(wareHouse, *it)){
+                --it;
+            } 
+            
+        }
+
+        ++it;
+    }
+} 
+
+
+
+
+bool SimulateStep::orderToCollectorVolunteer(WareHouse &wareHouse, Order* order){
+    vector<Volunteer*> & volunteers= wareHouse.getVolunteers();
     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-    int i = 0;
 
-    for(Order* order : pendingOrders){
-        if(order->getStatus() == OrderStatus::PENDING){
-            static_cast<CollectorVolunteer*>(collector)->acceptOrder(*order);
-            order->setStatus(OrderStatus::COLLECTING);
-            order->setCollectorId(collector->getId());
-            inProcessOrders.push_back(order);
-            pendingOrders.erase(pendingOrders.begin() + i);
-
-            break;
-                    }
-
+    for (Volunteer* vol : volunteers) {
+        if((typeid(*vol) == typeid(CollectorVolunteer) ||  typeid(*vol) == typeid(LimitedCollectorVolunteer)) && vol->canTakeOrder(*order)){
+                static_cast<CollectorVolunteer*>(vol)->acceptOrder(*order);
+                order->setStatus(OrderStatus::COLLECTING);
+                order->setCollectorId(vol->getId());
+                inProcessOrders.push_back(order);
+                int i = wareHouse.getIndexInPendingOrder(order->getId());
+                pendingOrders.erase(pendingOrders.begin() + i);
+                return true;
+                
             }
-            i+=1;
 
-}
+        }
+
+        return false;
+
+    }
 
 
-void SimulateStep::orderToDriverVolunteer(WareHouse &wareHouse, Volunteer* driver){
+
+
+bool SimulateStep::orderToDriverVolunteer(WareHouse &wareHouse, Order* order){
+    vector<Volunteer*> & volunteers= wareHouse.getVolunteers();
     vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
- 
-    int i = 0;
 
-     for(Order* order : pendingOrders){
-        if(order->getStatus() == OrderStatus::COLLECTING){
-            static_cast<DriverVolunteer*>(driver)->acceptOrder(*order);
+    for (Volunteer* vol : volunteers){
+            
+        if((typeid(*vol) == typeid(DriverVolunteer) ||  typeid(*vol) == typeid(LimitedDriverVolunteer)) && vol->canTakeOrder(*order)){
+            dynamic_cast<DriverVolunteer*>(vol)->acceptOrder(*order);
             order->setStatus(OrderStatus::DELIVERING);
-            order->setDriverId(driver->getId());
+            order->setDriverId(vol->getId());
             inProcessOrders.push_back(order);
+            int i = wareHouse.getIndexInPendingOrder(order->getId());
             pendingOrders.erase(pendingOrders.begin() + i);
 
-            break;
-                    }
-
-            }
-            i+=1;
-}
-
-void SimulateStep::checkCollectorInProcess(WareHouse &wareHouse, Volunteer* collector){
-    vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
-    vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
-
-    static_cast<CollectorVolunteer*>(collector)->step();
-
-    if(static_cast<CollectorVolunteer*>(collector)->getTimeLeft()==0){
-        int orderId = collector->getActiveOrderId();
-        Order* order = &(wareHouse.getOrder(orderId));
-        order->setCollectorId(NO_VOLUNTEER);
-        pendingOrders.push_back(order);
-        int inProIndex = wareHouse.getIndexInProcessOrder(orderId);
-        inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
-        if(typeid(collector) == typeid(LimitedCollectorVolunteer)){
-            if(static_cast<LimitedCollectorVolunteer*>(collector)->getNumOrdersLeft()==0){
-                delete collector;
-            }
+            return true;
+                
         }
 
     }
 
+    return false;
+            
 }
 
+void SimulateStep::step2(WareHouse &wareHouse){
+    vector<Volunteer*> & volunteers= wareHouse.getVolunteers();
+    for (Volunteer* vol : volunteers){
+        if(vol->isBusy()){
+            vol->step();
+            if((typeid(*vol) == typeid(CollectorVolunteer) ||  typeid(*vol) == typeid(LimitedCollectorVolunteer))){
+                checkCollectorInProcess(wareHouse, vol);
+            }
+            else if( (typeid(*vol) == typeid(DriverVolunteer) ||  typeid(*vol) == typeid(LimitedDriverVolunteer))){
+                checkDriverInProcess(wareHouse, vol);
+            }
+            
+
+        }
+    }
+
+}
+
+
+
+void SimulateStep::checkCollectorInProcess(WareHouse &wareHouse, Volunteer* collector){
+    vector<Order*> & pendingOrders = wareHouse.getPendingOrders();
+    vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
+    vector<Volunteer*> & volunteers = wareHouse.getVolunteers();
+    if(dynamic_cast<CollectorVolunteer*>(collector)->getTimeLeft()==0){
+                int orderId = collector->getCompletedOrderId();
+                Order* order = &(wareHouse.getOrder(orderId));
+                order->setCollectorId(NO_VOLUNTEER);
+                pendingOrders.push_back(order);
+                int inProIndex = wareHouse.getIndexInProcessOrder(orderId);
+                inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
+                if(dynamic_cast<LimitedCollectorVolunteer*>(collector)){
+                    if(dynamic_cast<LimitedCollectorVolunteer*>(collector)->getNumOrdersLeft()==0) {
+                    volunteers.erase(remove(volunteers.begin(), volunteers.end(),collector),volunteers.end());
+                    delete collector;
+            
+                }
+            }
+
+    }
+}
 void SimulateStep::checkDriverInProcess(WareHouse &wareHouse, Volunteer* driver){
     vector<Order*> & inProcessOrders = wareHouse.getInProcessOrders();
     vector<Order*> & completedOrders = wareHouse.getCompletedOrders();
-   
-    static_cast<DriverVolunteer*>(driver)->step();
-
+    vector<Volunteer*> & volunteers = wareHouse.getVolunteers();
     if(static_cast<DriverVolunteer*>(driver)->getDistanceLeft()==0){
-        int orderId = driver->getActiveOrderId();
+        int orderId = driver->getCompletedOrderId();
         Order* order = &(wareHouse.getOrder(orderId));
         order->setStatus(OrderStatus::COMPLETED);
         order->setDriverId(NO_VOLUNTEER);
         completedOrders.push_back(order);
         int inProIndex = wareHouse.getIndexInProcessOrder(orderId);
         inProcessOrders.erase(inProcessOrders.begin() + inProIndex);
-        if(typeid(driver) == typeid(LimitedDriverVolunteer)){
-            if(static_cast<LimitedDriverVolunteer*>(driver)->getNumOrdersLeft()==0){
-                delete driver;
-            }
+        
+        if(dynamic_cast<LimitedDriverVolunteer*>(driver)) {
+         if(dynamic_cast<LimitedDriverVolunteer*>(driver)->getNumOrdersLeft()==0){
+            volunteers.erase(remove(volunteers.begin(), volunteers.end(),driver),volunteers.end());
+            delete driver;
+            
         }
-
+        }
     }
-
 }
+
+
 
 std::string SimulateStep::toString() const{
     return ("step = " + std::to_string(numOfSteps));
@@ -334,8 +196,11 @@ std::string SimulateStep::toString() const{
 
 SimulateStep* SimulateStep::clone() const{
     return new SimulateStep(*this);
-
 }
+
+
+//finished SimulateStep-----------
+
 
 //finished SimulateStep------------------------------------------------------------------
 //AddOrder
@@ -438,8 +303,8 @@ void PrintOrderStatus::act(WareHouse &wareHouse){
         error("order does not exist");
     }
     else{
-        Order order = wareHouse.getOrder(orderId); 
-        cout<< order.toString()<<endl;
+        string output = wareHouse.getOrder(orderId).toString();   
+        cout << output << endl;
         complete();
     }
 
@@ -503,15 +368,13 @@ PrintVolunteerStatus::PrintVolunteerStatus(int id):BaseAction(), VolunteerId(id)
 }
 
 void PrintVolunteerStatus::act(WareHouse &wareHouse){
-    if(!(wareHouse.volunteerExist(VolunteerId))){
-         error("Customer doesn't exist");
+    auto vol = &(wareHouse.getVolunteer(VolunteerId));
+    if((*vol).getId()==-1){
+        error("volunteer does not exist");
     }
-
     else{
-        auto vol = &(wareHouse.getVolunteer(VolunteerId));
-        cout << (*vol).toString() << endl;
-        complete();
-
+         cout << (*vol).toString() << endl;
+         complete();
     }
 
     wareHouse.addAction(PrintVolunteerStatus::clone());
@@ -535,48 +398,12 @@ void PrintActionsLog::act(WareHouse &wareHouse){
     auto actionsLog = wareHouse.getActions();
     string output = "";
     for(auto action:actionsLog){
-        output = output + "\n" +  actionTypeToString(action) +
+        output = output + "\n" + 
         action->toString() + " " + PrintActionsLog::actionStatusToString(action->getStatus());
     }
 
     cout << output << endl;
 
-}
-
-string PrintActionsLog::actionTypeToString(BaseAction* action)const{
-    if(typeid(*action) == typeid(SimulateStep)){
-        return "SimulateStep";
-    }
-
-    else if(typeid(*action) == typeid(AddOrder)){
-        return "AddOrder";
-    }
-
-    else if(typeid(*action) == typeid(AddCustomer)){
-        return "AddCustomer";
-    }
-
-    else if(typeid(*action) == typeid(PrintOrderStatus)){
-        return "PrintOrderStatus";
-    }
-
-    else if(typeid(*action) == typeid(PrintCustomerStatus)){
-        return "PrintCustomerStatus";
-    }
-
-     else if(typeid(*action) == typeid(PrintVolunteerStatus)){
-        return "PrintVolunteerStatus";
-    }
-
-     else if(typeid(*action) == typeid(BackupWareHouse)){
-        return "BackupWareHouse";
-    }
-
-    else if(typeid(*action) == typeid(BackupWareHouse)){
-        return "RestoreWareHouse";
-    }
-
-    return "";
 }
 
 std::string PrintActionsLog::actionStatusToString(ActionStatus status)const {
@@ -641,6 +468,7 @@ void BackupWareHouse::act(WareHouse &wareHouse){
         *backup = wareHouse;
     }
 
+     wareHouse.addAction(BackupWareHouse::clone());
     complete();
 }
 
@@ -666,6 +494,8 @@ void RestoreWareHouse::act(WareHouse &wareHouse){
          wareHouse = *backup;
          complete();
     }
+     wareHouse.addAction(RestoreWareHouse::clone());
+
 }
 
  RestoreWareHouse* RestoreWareHouse::clone() const{
@@ -676,7 +506,3 @@ void RestoreWareHouse::act(WareHouse &wareHouse){
      return "";
  }
 //finished RestoreWareHouse--------------------------------------------------------------------
-
-
-
-
