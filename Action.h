@@ -44,14 +44,12 @@ class SimulateStep : public BaseAction {
         SimulateStep(int numOfSteps);
         void act(WareHouse &wareHouse) override;
         void actOneStep(WareHouse &wareHouse);
-        //void orderToCollectorVolunteer(WareHouse &wareHouse, Order* Order);//we added it
-        //void orderToDriverVolunteer(WareHouse &wareHouse, Order* order);//we added it
-        // void checkCollectingOrderInProcess(WareHouse &wareHouse, Order* order);//we added it
-        // void checkDeliveringOrderInProcess(WareHouse &wareHouse, Order* order);//we added it
-        void orderToCollectorVolunteer(WareHouse &wareHouse, Volunteer* collector);//we added it
-        void orderToDriverVolunteer(WareHouse &wareHouse, Volunteer* driver);//we added it
+        void step1(WareHouse &wareHouse);//we added it
+        bool orderToCollectorVolunteer(WareHouse &wareHouse, Order* order);//we added it
+        bool orderToDriverVolunteer(WareHouse &wareHouse, Order* order);//we added it
+        void step2(WareHouse &wareHouse);//we added it
         void checkCollectorInProcess(WareHouse &wareHouse, Volunteer* collector);//we added it
-       void checkDriverInProcess(WareHouse &wareHouse, Volunteer* driver);//we added it
+        void checkDriverInProcess(WareHouse &wareHouse, Volunteer* driver);//we added it
         std::string toString() const override;
         SimulateStep *clone() const override;
 
@@ -122,7 +120,6 @@ class PrintActionsLog : public BaseAction {
     public:
         PrintActionsLog();
         void act(WareHouse &wareHouse) override;
-        string actionTypeToString(BaseAction* action)const;//we added it
         std::string actionStatusToString(ActionStatus status)const;//we added it
         PrintActionsLog *clone() const override;
         string toString() const override;
