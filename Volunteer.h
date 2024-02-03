@@ -20,7 +20,6 @@ class Volunteer {
         virtual bool canTakeOrder(const Order &order) const = 0; // Signal if the volunteer can take the order.      
         virtual void acceptOrder(const Order &order) = 0; // Prepare for new order(Reset activeOrderId,TimeLeft,DistanceLeft,OrdersLeft depends on the volunteer type)  
         virtual void step() = 0; //Simulate volunteer step,if the volunteer finished the order, transfer activeOrderId to completedOrderId
-
         virtual string toString() const = 0;
         virtual Volunteer* clone() const = 0; //Return a copy of the volunteer
 
@@ -59,8 +58,8 @@ class LimitedCollectorVolunteer: public CollectorVolunteer {
 
     public:
         LimitedCollectorVolunteer(int id, string name, int coolDown ,int maxOrders);
+        ~LimitedCollectorVolunteer()=default;//we added it
         LimitedCollectorVolunteer *clone() const override;
-        ~LimitedCollectorVolunteer() override;//we added it
         bool hasOrdersLeft() const override;
         bool canTakeOrder(const Order &order) const override;
         void acceptOrder(const Order &order) override;
@@ -100,8 +99,8 @@ class LimitedDriverVolunteer: public DriverVolunteer {
 
     public:
         LimitedDriverVolunteer(int id, const string &name, int maxDistance, int distancePerStep,int maxOrders);
+         ~LimitedDriverVolunteer()=default;//we added it
         LimitedDriverVolunteer *clone() const override;
-        ~LimitedDriverVolunteer() override;//we added it
         int getMaxOrders() const;
         int getNumOrdersLeft() const;
         bool hasOrdersLeft() const override;
