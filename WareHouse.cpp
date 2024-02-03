@@ -575,14 +575,16 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
             // Extract the number for step action
             int number;
             if (iss >> number) {
-                SimulateStep(number).act(*this);
+                SimulateStep* step = new SimulateStep(number);
+                addAction(step);
             } 
         } 
         else if (action == "order") {
             // Extract the number for order action
             int number;
             if (iss >> number) {
-                AddOrder(number).act(*this);
+                AddOrder* order = new AddOrder(number);
+                addAction(order);
             }      
         }  
         else if (action =="customer"){  
@@ -591,47 +593,55 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
             int distance;
             int maxOrd;  
             if(iss >> name >> type >> distance >> maxOrd){
-                AddCustomer (name,type, distance, maxOrd).act(*this);
-                
+                AddCustomer* cust = new AddCustomer(name,type, distance, maxOrd);
+                addAction(cust);
             }            
         }
         else if (action =="orderStatus"){  
             int number;
             if (iss >> number) {
-                PrintOrderStatus(number).act(*this);
+                PrintOrderStatus* print = new PrintOrderStatus(number);
+                addAction(print);
             }    
         }
         else if (action =="customerStatus"){  
             int number;
             if (iss >> number) {
-                PrintCustomerStatus(number).act(*this);
+                PrintCustomerStatus* print = new PrintCustomerStatus(number);
+                addAction(print);
             }    
         }
         else if (action =="volunteerStatus"){  
             int number;
             if (iss >> number) {
-                PrintVolunteerStatus(number).act(*this);
+                PrintVolunteerStatus* print = new PrintVolunteerStatus(number);
+                addAction(print);
             }  
         }
         else if (action =="log"){  
-            PrintActionsLog().act(*this);
+            PrintActionsLog* log = new PrintActionsLog();
+            addAction(log);
         }
         else if (action =="close"){ 
-            Close().act(*this);
+            Close* close = new Close();
+            addAction(close);
         }
 
         else if (action =="backup"){  
-            BackupWareHouse().act(*this);
+            BackupWareHouse* back = new BackupWareHouse();
+            addAction(back);
         }
 
         else if (action =="restore"){  
-            RestoreWareHouse().act(*this);
+            RestoreWareHouse* restore = new RestoreWareHouse();
+            addAction(restore);
         }
         else{
-            std::cout << "Invalid command, please try again" << std::endl;
+            std::cout << "try again!" << std::endl;
         }
 
     }
+
 
  }
 
@@ -641,7 +651,7 @@ WareHouse& WareHouse::operator=(const WareHouse &&other){
  }
 
  void WareHouse::addAction(BaseAction* action){
-    //actionsLog.push_back(action);
+     (*action).act(*this);
      this->actionsLog.push_back(action);
  }
 
