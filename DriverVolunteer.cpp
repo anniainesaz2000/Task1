@@ -45,6 +45,7 @@ DriverVolunteer::DriverVolunteer(int id1, string name1, int maxDistance1, int di
    }
 
    void DriverVolunteer::acceptOrder(const Order &order){
+      activeOrderId = order.getId();
       distanceLeft = order.getDistance();
    }
 
