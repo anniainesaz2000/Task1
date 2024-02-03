@@ -59,15 +59,14 @@ std::string Order::orderStatusToString(OrderStatus status)const {
         "\nOrderStatus: " + orderStatusToString(status) +
         "\nCustomerId: " + std::to_string(customerId) +
         "\nCollector: " + ((collectorId == NO_VOLUNTEER) ? "None":std::to_string(collectorId)) +
-        "\nDriver: " + ((driverId == NO_VOLUNTEER) ? "None":std::to_string(driverId))
-    );
+        "\nDriver: " + ((driverId == NO_VOLUNTEER) ? "None":std::to_string(driverId)) +
+        "\n---------------------");
  }
 
  const string Order::closeToString() const{
      return (
-        "OrderId: " + std::to_string(id) +
-        "\nCustomerId: " + std::to_string(customerId) +
-        "\nOrderStatus: " + orderStatusToString(status));
+        "OrderId: " + std::to_string(id) + " ,CustomerId: " + std::to_string(customerId) +
+        " ,OrderStatus: " + orderStatusToString(status));
 
  }
 
